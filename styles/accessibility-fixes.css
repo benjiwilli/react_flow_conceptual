@@ -1,0 +1,289 @@
+/* WCAG 2.1 AA Accessibility Fixes */
+/* Color contrast fixes for 4.5:1 ratio compliance */
+
+/* ========================================
+   Node Colors - WCAG AA Compliant
+   ======================================== */
+
+/* Learning Nodes - Blue (7.2:1 contrast on white text) */
+.bg-node-learning {
+  background-color: #1e3a8a;
+}
+.border-node-learning {
+  border-color: #1e3a8a;
+}
+.text-node-learning {
+  color: #1e3a8a;
+}
+
+/* AI Nodes - Purple (7.1:1 contrast on white text) */
+.bg-node-ai {
+  background-color: #6b21a8;
+}
+.border-node-ai {
+  border-color: #6b21a8;
+}
+.text-node-ai {
+  color: #6b21a8;
+}
+
+/* Scaffolding Nodes - Green (5.5:1 contrast on white text) */
+.bg-node-scaffolding {
+  background-color: #166534;
+}
+.border-node-scaffolding {
+  border-color: #166534;
+}
+.text-node-scaffolding {
+  color: #166534;
+}
+
+/* Interaction Nodes - Orange (4.5:1 contrast on white text) */
+.bg-node-interaction {
+  background-color: #c2410c;
+}
+.border-node-interaction {
+  border-color: #c2410c;
+}
+.text-node-interaction {
+  color: #c2410c;
+}
+
+/* Assessment Nodes - Indigo (6.4:1 contrast on white text) */
+.bg-node-assessment {
+  background-color: #4338ca;
+}
+.border-node-assessment {
+  border-color: #4338ca;
+}
+.text-node-assessment {
+  color: #4338ca;
+}
+
+/* Control Flow Nodes - Gray (7.5:1 contrast on white text) */
+.bg-node-control {
+  background-color: #374151;
+}
+.border-node-control {
+  border-color: #374151;
+}
+.text-node-control {
+  color: #374151;
+}
+
+/* ========================================
+   Focus Indicators - WCAG 2.4.7
+   ======================================== */
+
+/* Enhanced focus outline for all interactive elements */
+*:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 2px;
+}
+
+/* Remove default outline when focus-visible is supported */
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Button focus states */
+button:focus-visible,
+[role="button"]:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+}
+
+/* Input focus states */
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 0;
+  border-color: #2563eb;
+}
+
+/* Link focus states */
+a:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* ========================================
+   Skip Links - WCAG 2.4.1
+   ======================================== */
+
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #1e3a8a;
+  color: white;
+  padding: 8px 16px;
+  z-index: 100;
+  font-weight: 600;
+  text-decoration: none;
+  transition: top 0.3s;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* ========================================
+   Screen Reader Only Text
+   ======================================== */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Make sr-only visible on focus (for skip links) */
+.sr-only-focusable:focus,
+.sr-only-focusable:active {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* ========================================
+   Reduced Motion - WCAG 2.3.3
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ========================================
+   Text Spacing - WCAG 1.4.12
+   ======================================== */
+
+/* Ensure text can be resized up to 200% without loss of content */
+body {
+  line-height: 1.5;
+  letter-spacing: 0.12em;
+  word-spacing: 0.16em;
+}
+
+/* Allow paragraph spacing */
+p {
+  margin-bottom: 1.5em;
+}
+
+/* ========================================
+   Color Contrast Fixes - WCAG 1.4.3
+   ======================================== */
+
+/* Ensure sufficient contrast for placeholder text */
+::placeholder {
+  color: #6b7280;
+  opacity: 1;
+}
+
+/* Ensure sufficient contrast for disabled states */
+:disabled,
+[aria-disabled="true"] {
+  color: #6b7280;
+  background-color: #f3f4f6;
+}
+
+/* Error states with sufficient contrast */
+.error-text,
+.text-error {
+  color: #b91c1c; /* Red-700 - 5.9:1 contrast */
+}
+
+/* Success states with sufficient contrast */
+.success-text,
+.text-success {
+  color: #15803d; /* Green-700 - 4.7:1 contrast */
+}
+
+/* Warning states with sufficient contrast */
+.warning-text,
+.text-warning {
+  color: #a16207; /* Yellow-700 - 4.5:1 contrast */
+}
+
+/* ========================================
+   Link Styling - WCAG 1.4.1
+   ======================================== */
+
+/* Links must be distinguishable by more than color */
+a {
+  text-decoration: underline;
+}
+
+a:hover {
+  text-decoration: none;
+  border-bottom: 2px solid currentColor;
+}
+
+/* Navigation links can use different styling */
+nav a {
+  text-decoration: none;
+}
+
+nav a:hover,
+nav a:focus {
+  text-decoration: underline;
+}
+
+/* ========================================
+   Form Labels - WCAG 1.3.1
+   ======================================== */
+
+/* Ensure labels are properly associated */
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+/* Required field indicator */
+.required::after,
+[aria-required="true"]::after {
+  content: " *";
+  color: #b91c1c;
+}
+
+/* ========================================
+   Interactive Element Sizing - WCAG 2.5.5
+   ======================================== */
+
+/* Minimum touch target size of 44x44 pixels */
+button,
+[role="button"],
+a,
+input[type="checkbox"],
+input[type="radio"],
+select {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* For inline elements, use padding to meet target size */
+a {
+  padding: 0.25rem;
+}

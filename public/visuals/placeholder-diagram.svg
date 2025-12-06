@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+  <defs>
+    <linearGradient id="diagBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f0fdf4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#dcfce7;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#diagBg)" rx="8"/>
+  <!-- Flowchart boxes -->
+  <rect x="160" y="30" width="80" height="40" rx="4" fill="#22c55e" stroke="#15803d" stroke-width="2"/>
+  <rect x="60" y="120" width="80" height="40" rx="4" fill="#4ade80" stroke="#15803d" stroke-width="2"/>
+  <rect x="260" y="120" width="80" height="40" rx="4" fill="#4ade80" stroke="#15803d" stroke-width="2"/>
+  <rect x="160" y="210" width="80" height="40" rx="4" fill="#86efac" stroke="#15803d" stroke-width="2"/>
+  <!-- Arrows -->
+  <path d="M180 70 L100 120" stroke="#15803d" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  <path d="M220 70 L300 120" stroke="#15803d" stroke-width="2" fill="none"/>
+  <path d="M100 160 L180 210" stroke="#15803d" stroke-width="2" fill="none"/>
+  <path d="M300 160 L220 210" stroke="#15803d" stroke-width="2" fill="none"/>
+  <text x="200" y="280" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#166534">Educational Diagram</text>
+</svg>
