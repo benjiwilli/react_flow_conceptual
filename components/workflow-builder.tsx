@@ -45,6 +45,8 @@ const edgeTypes: EdgeTypes = {
   custom: CustomEdge,
 }
 
+export { WorkflowBuilder }
+
 export default function WorkflowBuilder() {
   const reactFlowWrapper = useRef<HTMLDivElement>(null)
   const [nodes, setNodes, onNodesChange] = useNodesState([])
