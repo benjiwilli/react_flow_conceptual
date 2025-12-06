@@ -1,30 +1,116 @@
-# React Flow Builder
+# LinguaFlow
 
-*Automatically synced with your [v0.dev](https://v0.dev) deployments*
+**AI-Powered ESL Learning Orchestrator for Alberta K-12**
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/echoexe/v0-react-flow-builder-a5)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.dev-black?style=for-the-badge)](https://v0.dev/chat/projects/qviQOLwSGUg)
+LinguaFlow transforms a visual workflow builder into a specialized AI Agent Orchestration Platform designed for English as a Second Language (ESL) students in Alberta's K-12 education system. The platform enables educators to create personalized, adaptive learning pathways that connect multiple AI models to deliver scaffolded literacy and numeracy instruction tailored to each student's proficiency level, native language, and cultural context.
 
-## Overview
+## Features
 
-This repository will stay in sync with your deployed chats on [v0.dev](https://v0.dev).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.dev](https://v0.dev).
+### For Teachers
+- **Visual Workflow Builder** - Drag-and-drop interface to design learning pathways
+- **40+ Node Types** - Learning, AI, Scaffolding, Interaction, Flow Control, and Output nodes
+- **Real-time Classroom Dashboard** - Monitor student progress with intelligent alerts
+- **Learning Analytics** - Track vocabulary acquisition, comprehension, and identify challenges
+- **Curriculum Alignment** - Maps to Alberta Programs of Study and ESL Benchmarks
 
-## Deployment
+### For Students
+- **Personalized Learning** - AI adapts content to each student's ELPA level (1-5)
+- **L1 Bridge Support** - 14+ languages with translations and cultural context
+- **Voice Input** - Speech recognition with pronunciation feedback
+- **Visual Supports** - Images, diagrams, and graphic organizers
+- **Celebration System** - Achievements, streaks, and encouraging feedback
 
-Your project is live at:
+## Tech Stack
 
-**[https://vercel.com/echoexe/v0-react-flow-builder-a5](https://vercel.com/echoexe/v0-react-flow-builder-a5)**
+- **Framework**: Next.js 15 App Router with React 19 + TypeScript
+- **UI**: Tailwind CSS + shadcn/ui components + Geist fonts
+- **Workflow Engine**: React Flow / XYFlow for diagramming
+- **Icons**: Lucide React
+- **Animations**: canvas-confetti for celebrations
 
-## Build your app
+## Getting Started
 
-Continue building your app on:
+```bash
+# Install dependencies
+npm install --legacy-peer-deps
 
-**[https://v0.dev/chat/projects/qviQOLwSGUg](https://v0.dev/chat/projects/qviQOLwSGUg)**
+# Run development server
+npm run dev
 
-## How It Works
+# Build for production
+npm run build
+```
 
-1. Create and modify your project using [v0.dev](https://v0.dev)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+## Project Structure
+
+```
+/app
+  /page.tsx                    → Landing page
+  /teacher/builder/page.tsx    → Workflow Builder
+  /teacher/classroom/page.tsx  → Classroom Management
+  /classroom/[classId]/page.tsx → Live Classroom Dashboard
+  /student/page.tsx            → Student Portal
+  /student/session/[sessionId] → Learning Session
+
+/components
+  /builder                     → Workflow Builder Components
+    node-palette.tsx           → Categorized node library
+    node-inspector.tsx         → Node configuration panel
+    execution-panel.tsx        → Real-time execution logs
+    workflow-canvas.tsx        → React Flow canvas
+  /nodes                       → Node Components by Category
+    /esl                       → ESL-specific nodes
+    /assessment                → Assessment nodes
+    /orchestration             → AI & flow control nodes
+  /student                     → Student Interface Components
+  /classroom                   → Classroom Dashboard Components
+
+/lib
+  /types                       → TypeScript type definitions
+  /constants                   → ELPA levels, curriculum, languages
+  /engine                      → Workflow execution engine
+
+/contexts                      → React Context providers
+/hooks                         → Custom React hooks
+```
+
+## Node Categories
+
+| Category | Color | Nodes |
+|----------|-------|-------|
+| Learning | Blue | Student Profile, Curriculum Selector, Content Generator, Math Problem Generator, Vocabulary Builder |
+| AI | Purple | AI Model, Prompt Template, Structured Output |
+| Scaffolding | Green | Scaffolding, L1 Bridge, Visual Support |
+| Interaction | Orange | Human Input, Voice Input, Comprehension Check, Multiple Choice |
+| Flow Control | Gray | Proficiency Router, Loop, Merge, Conditional |
+| Output | Teal | Progress Tracker, Feedback, Celebration |
+
+## Design Principles
+
+1. **Asset-Based Language Philosophy** - Students' first languages are assets, not deficits
+2. **Krashen's i+1 Comprehensible Input** - Content adjusted to one level above proficiency
+3. **Alberta Curriculum Alignment** - Maps to Programs of Study and ESL Benchmarks
+4. **Teacher as Designer, AI as Differentiator** - Teachers design; AI personalizes at scale
+5. **Transparent AI** - Students see AI as a learning partner
+
+## ELPA Levels
+
+| Level | Name | Description |
+|-------|------|-------------|
+| 1 | Beginning | New to English, relies on visuals and L1 |
+| 2 | Developing | Understands simple sentences |
+| 3 | Expanding | Engages with grade-level content with support |
+| 4 | Bridging | Approaching grade-level proficiency |
+| 5 | Proficient | Meets grade-level expectations |
+
+## Supported Languages
+
+Mandarin, Cantonese, Punjabi, Arabic, Spanish, Tagalog, Ukrainian, Vietnamese, Korean, Farsi, Hindi, Urdu, French, Somali
+
+## License
+
+MIT
+
+---
+
+*Built for Alberta's diverse learners, honoring their linguistic and cultural assets.*
