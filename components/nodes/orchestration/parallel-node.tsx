@@ -21,7 +21,7 @@ export interface ParallelNodeData {
 }
 
 export const ParallelNode = memo(({ data, selected }: NodeProps) => {
-  const nodeData = data as ParallelNodeData
+  const nodeData = data as unknown as ParallelNodeData
 
   return (
     <div

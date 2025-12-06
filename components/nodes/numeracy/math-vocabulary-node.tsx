@@ -31,7 +31,7 @@ export interface MathVocabularyNodeData {
 }
 
 export const MathVocabularyNode = memo(({ data, selected }: NodeProps) => {
-  const nodeData = data as MathVocabularyNodeData
+  const nodeData = data as unknown as MathVocabularyNodeData
 
   return (
     <div

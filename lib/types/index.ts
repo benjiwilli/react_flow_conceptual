@@ -4,7 +4,13 @@
 
 export * from "./student"
 export * from "./curriculum"
-export * from "./assessment"
+export type { AssessmentResult, AssessmentType, QuestionResult, RubricCriterion as AssessmentRubricCriterion } from "./assessment"
 export * from "./execution"
-export * from "./workflow"
+export type { 
+  LinguaFlowNodeType, 
+  LinguaFlowWorkflow, 
+  WorkflowCategory, 
+  NodePort,
+  LinguaFlowNodeData as WorkflowNodeData 
+} from "./workflow"
 export * from "./nodes"

@@ -21,7 +21,7 @@ export interface WorkflowExecution {
 }
 
 export interface NodeExecution {
-  id: string
+  id?: string
   nodeId: string
   nodeType: string
   status: NodeExecutionStatus

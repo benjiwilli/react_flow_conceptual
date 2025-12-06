@@ -31,7 +31,7 @@ export interface VisualMathNodeData {
 }
 
 export const VisualMathNode = memo(({ data, selected }: NodeProps) => {
-  const nodeData = data as VisualMathNodeData
+  const nodeData = data as unknown as VisualMathNodeData
 
   return (
     <div

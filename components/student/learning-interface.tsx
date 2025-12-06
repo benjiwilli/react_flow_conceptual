@@ -36,7 +36,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import { VoiceRecorder } from "./voice-recorder"
-import { VisualFeedback, CelebrationOverlay } from "./visual-feedback"
+import { CelebrationOverlay } from "./visual-feedback"
 
 interface LearningContent {
   type: "text" | "question" | "multiple-choice" | "voice-prompt" | "visual"

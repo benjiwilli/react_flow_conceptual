@@ -37,10 +37,8 @@ export type LinguaFlowNodeType =
   | "process"
   | "code"
 
-export interface LinguaFlowNode extends Node {
-  type: LinguaFlowNodeType
-  data: LinguaFlowNodeData
-}
+// LinguaFlowNode uses Node type with a generic Record to satisfy the constraint
+export type LinguaFlowNode = Node<Record<string, unknown> & Partial<LinguaFlowNodeData>, LinguaFlowNodeType>
 
 export interface LinguaFlowNodeData {
   label: string

@@ -24,7 +24,7 @@ export interface ProgressTrackerNodeData {
 }
 
 export const ProgressTrackerNode = memo(({ data, selected }: NodeProps) => {
-  const nodeData = data as ProgressTrackerNodeData
+  const nodeData = data as unknown as ProgressTrackerNodeData
 
   return (
     <div

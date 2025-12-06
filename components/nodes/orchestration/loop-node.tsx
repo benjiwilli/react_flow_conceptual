@@ -23,7 +23,7 @@ export interface LoopNodeData {
 }
 
 export const LoopNode = memo(({ data, selected }: NodeProps) => {
-  const nodeData = data as LoopNodeData
+  const nodeData = data as unknown as LoopNodeData
 
   return (
     <div

@@ -32,7 +32,7 @@ export interface WordProblemDecoderNodeData {
 }
 
 export const WordProblemDecoderNode = memo(({ data, selected }: NodeProps) => {
-  const nodeData = data as WordProblemDecoderNodeData
+  const nodeData = data as unknown as WordProblemDecoderNodeData
 
   return (
     <div

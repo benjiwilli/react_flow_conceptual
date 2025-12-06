@@ -22,7 +22,7 @@ export interface StudentProfileNodeData {
 }
 
 export const StudentProfileNode = memo(({ data, selected }: NodeProps) => {
-  const nodeData = data as StudentProfileNodeData
+  const nodeData = data as unknown as StudentProfileNodeData
 
   return (
     <div

@@ -70,7 +70,7 @@ const ICONS: Record<string, LucideIcon> = {
 
 export const GenericLinguaFlowNode = memo(({ data, selected, type }: NodeProps) => {
   const nodeConfig = getNodeConfig(type as AllNodeTypes)
-  const nodeData = data as BaseNodeData
+  const nodeData = data as unknown as BaseNodeData
 
   const category = nodeData?.category || nodeConfig?.category || "flow"
   const colors = CATEGORY_COLORS[category as NodeCategory]
@@ -149,8 +149,9 @@ GenericLinguaFlowNode.displayName = "GenericLinguaFlowNode"
 
 interface NodeContentProps {
   type: AllNodeTypes
-  data: BaseNodeData & Record<string, any>
-  colors: ReturnType<typeof CATEGORY_COLORS["learning"]>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  data: any
+  colors: typeof CATEGORY_COLORS["learning"]
 }
 
 function NodeContent({ type, data, colors }: NodeContentProps) {

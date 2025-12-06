@@ -31,7 +31,7 @@ export interface OralPracticeNodeData {
 }
 
 export const OralPracticeNode = memo(({ data, selected }: NodeProps) => {
-  const nodeData = data as OralPracticeNodeData
+  const nodeData = data as unknown as OralPracticeNodeData
 
   return (
     <div

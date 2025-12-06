@@ -29,7 +29,7 @@ export interface ScaffoldedContentNodeData {
 }
 
 export const ScaffoldedContentNode = memo(({ data, selected }: NodeProps) => {
-  const nodeData = data as ScaffoldedContentNodeData
+  const nodeData = data as unknown as ScaffoldedContentNodeData
 
   return (
     <div

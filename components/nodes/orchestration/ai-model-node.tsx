@@ -35,7 +35,7 @@ export interface AIModelNodeData {
 }
 
 export const AIModelNode = memo(({ data, selected }: NodeProps) => {
-  const nodeData = data as AIModelNodeData
+  const nodeData = data as unknown as AIModelNodeData
 
   return (
     <div

@@ -25,7 +25,7 @@ export interface VocabularyBuilderNodeData {
 }
 
 export const VocabularyBuilderNode = memo(({ data, selected }: NodeProps) => {
-  const nodeData = data as VocabularyBuilderNodeData
+  const nodeData = data as unknown as VocabularyBuilderNodeData
 
   return (
     <div

@@ -25,7 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { getNodeConfig, CATEGORY_COLORS } from "@/lib/constants/node-registry"
+import { getNodeConfig, CATEGORY_COLORS, CATEGORY_LABELS } from "@/lib/constants/node-registry"
 import { SUPPORTED_LANGUAGES } from "@/lib/constants/languages"
 import { ELPA_LEVELS } from "@/lib/constants/elpa-levels"
 import type { AllNodeTypes, NodeCategory, LinguaFlowNodeData } from "@/lib/types/nodes"
@@ -55,7 +55,7 @@ export function NodeInspector({ node, onUpdateNodeData, onClose }: NodeInspector
         <div className="flex items-center gap-3">
           <div className={cn("w-2 h-8 rounded-full", colors.bg)} />
           <div>
-            <h3 className="font-semibold text-sm">{node.data?.label || nodeConfig?.label || "Node"}</h3>
+            <h3 className="font-semibold text-sm">{(node.data as Record<string, unknown>)?.label as string || nodeConfig?.label || "Node"}</h3>
             <p className="text-xs text-muted-foreground">{nodeConfig?.description}</p>
           </div>
         </div>
@@ -97,19 +97,23 @@ export function NodeInspector({ node, onUpdateNodeData, onClose }: NodeInspector
       </Tabs>
 
       {/* Validation Errors */}
-      {node.data?.validationErrors && node.data.validationErrors.length > 0 && (
-        <div className="p-4 border-t bg-destructive/10">
-          <div className="flex items-center gap-2 text-destructive mb-2">
-            <AlertCircle className="h-4 w-4" />
-            <span className="text-sm font-medium">Validation Errors</span>
+      {(() => {
+        const nodeData = node.data as Record<string, unknown>
+        const errors = nodeData?.validationErrors as string[] | undefined
+        return errors && errors.length > 0 && (
+          <div className="p-4 border-t bg-destructive/10">
+            <div className="flex items-center gap-2 text-destructive mb-2">
+              <AlertCircle className="h-4 w-4" />
+              <span className="text-sm font-medium">Validation Errors</span>
+            </div>
+            <ul className="text-xs text-destructive space-y-1">
+              {errors.map((error: string, i: number) => (
+                <li key={i}>• {error}</li>
+              ))}
+            </ul>
           </div>
-          <ul className="text-xs text-destructive space-y-1">
-            {node.data.validationErrors.map((error: string, i: number) => (
-              <li key={i}>• {error}</li>
-            ))}
-          </ul>
-        </div>
-      )}
+        )
+      })()}
     </div>
   )
 }
@@ -121,7 +125,7 @@ interface NodeConfigFormProps {
 }
 
 function NodeConfigForm({ node, nodeConfig, updateData }: NodeConfigFormProps) {
-  const data = node.data as LinguaFlowNodeData
+  const data = node.data as unknown as LinguaFlowNodeData
 
   // Common label field
   const renderLabelField = () => (

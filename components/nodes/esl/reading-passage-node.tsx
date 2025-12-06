@@ -25,7 +25,7 @@ export interface ReadingPassageNodeData {
 }
 
 export const ReadingPassageNode = memo(({ data, selected }: NodeProps) => {
-  const nodeData = data as ReadingPassageNodeData
+  const nodeData = data as unknown as ReadingPassageNodeData
 
   return (
     <div

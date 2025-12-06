@@ -22,7 +22,7 @@ export interface StepByStepSolverNodeData {
 }
 
 export const StepByStepSolverNode = memo(({ data, selected }: NodeProps) => {
-  const nodeData = data as StepByStepSolverNodeData
+  const nodeData = data as unknown as StepByStepSolverNodeData
 
   return (
     <div

@@ -23,7 +23,7 @@ export interface L1BridgeNodeData {
 }
 
 export const L1BridgeNode = memo(({ data, selected }: NodeProps) => {
-  const nodeData = data as L1BridgeNodeData
+  const nodeData = data as unknown as L1BridgeNodeData
 
   return (
     <div

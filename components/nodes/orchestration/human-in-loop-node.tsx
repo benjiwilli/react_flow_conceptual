@@ -25,7 +25,7 @@ export interface HumanInLoopNodeData {
 }
 
 export const HumanInLoopNode = memo(({ data, selected }: NodeProps) => {
-  const nodeData = data as HumanInLoopNodeData
+  const nodeData = data as unknown as HumanInLoopNodeData
 
   return (
     <div

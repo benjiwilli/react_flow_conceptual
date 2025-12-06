@@ -5,17 +5,23 @@
 
 import { Suspense } from "react"
 import { ClassroomView } from "@/components/teacher/classroom-view"
+import { ClassroomProvider } from "@/contexts/classroom-context"
 
 export const metadata = {
   title: "Classroom | LinguaFlow",
   description: "Monitor student progress in real-time",
 }
 
+// Disable static generation since this page uses client-side context
+export const dynamic = "force-dynamic"
+
 export default function ClassroomPage() {
   return (
-    <Suspense fallback={<ClassroomSkeleton />}>
-      <ClassroomView />
-    </Suspense>
+    <ClassroomProvider>
+      <Suspense fallback={<ClassroomSkeleton />}>
+        <ClassroomView />
+      </Suspense>
+    </ClassroomProvider>
   )
 }
 

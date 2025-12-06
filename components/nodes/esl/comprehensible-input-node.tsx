@@ -21,7 +21,7 @@ export interface ComprehensibleInputNodeData {
 }
 
 export const ComprehensibleInputNode = memo(({ data, selected }: NodeProps) => {
-  const nodeData = data as ComprehensibleInputNodeData
+  const nodeData = data as unknown as ComprehensibleInputNodeData
 
   return (
     <div

@@ -25,7 +25,7 @@ export interface SpeakingAssessmentNodeData {
 }
 
 export const SpeakingAssessmentNode = memo(({ data, selected }: NodeProps) => {
-  const nodeData = data as SpeakingAssessmentNodeData
+  const nodeData = data as unknown as SpeakingAssessmentNodeData
 
   return (
     <div

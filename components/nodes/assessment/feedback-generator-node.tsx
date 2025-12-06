@@ -24,7 +24,7 @@ export interface FeedbackGeneratorNodeData {
 }
 
 export const FeedbackGeneratorNode = memo(({ data, selected }: NodeProps) => {
-  const nodeData = data as FeedbackGeneratorNodeData
+  const nodeData = data as unknown as FeedbackGeneratorNodeData
 
   return (
     <div

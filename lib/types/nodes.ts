@@ -601,7 +601,5 @@ export type LinguaFlowNodeData =
   | CelebrationNodeData
   | SpeakingAssessmentNodeData
 
-export interface LinguaFlowNode extends Node {
-  type: AllNodeTypes
-  data: LinguaFlowNodeData
-}
+// LinguaFlowNode uses Node type with a generic Record to satisfy the constraint
+export type LinguaFlowNode = Node<Record<string, unknown> & Partial<LinguaFlowNodeData>, AllNodeTypes>

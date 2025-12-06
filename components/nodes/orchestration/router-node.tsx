@@ -29,7 +29,7 @@ export interface RouterRoute {
 }
 
 export const RouterNode = memo(({ data, selected }: NodeProps) => {
-  const nodeData = data as RouterNodeData
+  const nodeData = data as unknown as RouterNodeData
 
   return (
     <div

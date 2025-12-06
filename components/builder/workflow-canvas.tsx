@@ -17,7 +17,6 @@ import {
   useEdgesState,
   type Connection,
   type Edge,
-  type NodeTypes,
   type EdgeTypes,
   type Node,
   type ReactFlowInstance,
@@ -58,7 +57,9 @@ import CustomEdge from "@/components/custom-edge"
 import { GenericLinguaFlowNode } from "./generic-node"
 
 // Build node types mapping
-const nodeTypes: NodeTypes = {
+// Using 'any' to avoid strict type incompatibility with React Flow v12
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const nodeTypes: Record<string, any> = {
   // ESL Nodes
   "student-profile": StudentProfileNode,
   "scaffolded-content": ScaffoldedContentNode,

@@ -24,7 +24,7 @@ export interface ComprehensionCheckNodeData {
 }
 
 export const ComprehensionCheckNode = memo(({ data, selected }: NodeProps) => {
-  const nodeData = data as ComprehensionCheckNodeData
+  const nodeData = data as unknown as ComprehensionCheckNodeData
 
   return (
     <div
