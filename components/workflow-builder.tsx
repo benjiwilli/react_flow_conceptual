@@ -1,109 +1,67 @@
 "use client"
 
-import type React from "react"
+/**
+ * LinguaFlow Workflow Builder
+ * Main component for creating AI-powered ESL learning pathways
+ *
+ * Layout:
+ * ┌─────────────────────────────────────────────────────────────────────────┐
+ * │ LinguaFlow                                    [Preview] [Save] [Share]  │
+ * ├──────────────┬──────────────────────────────────────────┬───────────────┤
+ * │              │                                          │               │
+ * │  NODE        │                                          │  INSPECTOR    │
+ * │  PALETTE     │          WORKFLOW CANVAS                 │               │
+ * │              │                                          │               │
+ * ├──────────────┴──────────────────────────────────────────┴───────────────┤
+ * │ EXECUTION PANEL                                                         │
+ * └─────────────────────────────────────────────────────────────────────────┘
+ */
 
-import { useState, useCallback, useRef } from "react"
-import ReactFlow, {
-  ReactFlowProvider,
-  Background,
-  Controls,
-  MiniMap,
-  addEdge,
-  Panel,
-  useNodesState,
-  useEdgesState,
-  type Connection,
-  type Edge,
-  type NodeTypes,
-  type EdgeTypes,
-  type Node,
-} from "reactflow"
-import "reactflow/dist/style.css"
+import { useState, useCallback, useEffect } from "react"
+import { ReactFlowProvider, useNodesState, useEdgesState, type Node, type Edge } from "@xyflow/react"
 import { toast } from "@/components/ui/use-toast"
 import { Button } from "@/components/ui/button"
-import { Save, Upload, Play } from "lucide-react"
-import NodeLibrary from "./node-library"
-import NodeConfigPanel from "./node-config-panel"
-import CustomEdge from "./custom-edge"
-import { InputNode } from "./nodes/input-node"
-import { OutputNode } from "./nodes/output-node"
-import { ProcessNode } from "./nodes/process-node"
-import { ConditionalNode } from "./nodes/conditional-node"
-import { CodeNode } from "./nodes/code-node"
-import { generateNodeId, createNode } from "@/lib/workflow-utils"
-import type { WorkflowNode } from "@/lib/types"
+import { Save, Upload, Play, Eye, Share2, GraduationCap, Menu, X } from "lucide-react"
+import { cn } from "@/lib/utils"
 
-const nodeTypes: NodeTypes = {
-  input: InputNode,
-  output: OutputNode,
-  process: ProcessNode,
-  conditional: ConditionalNode,
-  code: CodeNode,
+import { NodePalette } from "@/components/builder/node-palette"
+import { NodeInspector } from "@/components/builder/node-inspector"
+import { ExecutionPanel, useExecutionPanel } from "@/components/builder/execution-panel"
+import { WorkflowCanvas } from "@/components/builder/workflow-canvas"
+import type { LinguaFlowNodeData } from "@/lib/types/nodes"
+
+interface WorkflowBuilderProps {
+  initialWorkflow?: {
+    nodes: Node[]
+    edges: Edge[]
+  }
 }
 
-const edgeTypes: EdgeTypes = {
-  custom: CustomEdge,
-}
+export function WorkflowBuilder({ initialWorkflow }: WorkflowBuilderProps) {
+  // Node and Edge state
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialWorkflow?.nodes || [])
+  const [edges, setEdges, onEdgesChange] = useEdgesState(initialWorkflow?.edges || [])
 
-export { WorkflowBuilder }
-
-export default function WorkflowBuilder() {
-  const reactFlowWrapper = useRef<HTMLDivElement>(null)
-  const [nodes, setNodes, onNodesChange] = useNodesState([])
-  const [edges, setEdges, onEdgesChange] = useEdgesState([])
+  // UI state
   const [selectedNode, setSelectedNode] = useState<Node | null>(null)
-  const [reactFlowInstance, setReactFlowInstance] = useState<any>(null)
+  const [isPaletteOpen, setIsPaletteOpen] = useState(true)
+  const [isInspectorOpen, setIsInspectorOpen] = useState(true)
+  const [isExecutionPanelExpanded, setIsExecutionPanelExpanded] = useState(true)
 
-  const onConnect = useCallback(
-    (params: Edge | Connection) => setEdges((eds) => addEdge({ ...params, type: "custom" }, eds)),
-    [setEdges],
-  )
+  // Execution state
+  const execution = useExecutionPanel()
 
-  const onDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault()
-    event.dataTransfer.dropEffect = "move"
-  }, [])
-
-  const onDrop = useCallback(
-    (event: React.DragEvent<HTMLDivElement>) => {
-      event.preventDefault()
-
-      const reactFlowBounds = reactFlowWrapper.current?.getBoundingClientRect()
-      const type = event.dataTransfer.getData("application/reactflow")
-
-      // Check if the dropped element is valid
-      if (typeof type === "undefined" || !type) {
-        return
-      }
-
-      if (reactFlowBounds && reactFlowInstance) {
-        const position = reactFlowInstance.screenToFlowPosition({
-          x: event.clientX - reactFlowBounds.left,
-          y: event.clientY - reactFlowBounds.top,
-        })
-
-        const newNode = createNode({
-          type,
-          position,
-          id: generateNodeId(type),
-        })
-
-        setNodes((nds) => nds.concat(newNode))
-      }
-    },
-    [reactFlowInstance, setNodes],
-  )
-
-  const onNodeClick = useCallback((_: React.MouseEvent, node: Node) => {
+  // Handle node selection
+  const handleNodeSelect = useCallback((node: Node | null) => {
     setSelectedNode(node)
+    if (node) {
+      setIsInspectorOpen(true)
+    }
   }, [])
 
-  const onPaneClick = useCallback(() => {
-    setSelectedNode(null)
-  }, [])
-
+  // Update node data from inspector
   const updateNodeData = useCallback(
-    (nodeId: string, data: any) => {
+    (nodeId: string, data: Partial<LinguaFlowNodeData>) => {
       setNodes((nds) =>
         nds.map((node) => {
           if (node.id === nodeId) {
@@ -112,17 +70,19 @@ export default function WorkflowBuilder() {
               data: {
                 ...node.data,
                 ...data,
+                isConfigured: true,
               },
             }
           }
           return node
-        }),
+        })
       )
     },
-    [setNodes],
+    [setNodes]
   )
 
-  const saveWorkflow = () => {
+  // Save workflow
+  const saveWorkflow = useCallback(() => {
     if (nodes.length === 0) {
       toast({
         title: "Nothing to save",
@@ -132,24 +92,19 @@ export default function WorkflowBuilder() {
       return
     }
 
-    const workflow = {
-      nodes,
-      edges,
-    }
-
-    const workflowString = JSON.stringify(workflow)
-    localStorage.setItem("workflow", workflowString)
+    const workflow = { nodes, edges }
+    localStorage.setItem("linguaflow-workflow", JSON.stringify(workflow))
 
     toast({
       title: "Workflow saved",
-      description: "Your workflow has been saved successfully",
+      description: "Your learning pathway has been saved",
     })
-  }
+  }, [nodes, edges])
 
-  const loadWorkflow = () => {
-    const savedWorkflow = localStorage.getItem("workflow")
-
-    if (!savedWorkflow) {
+  // Load workflow
+  const loadWorkflow = useCallback(() => {
+    const saved = localStorage.getItem("linguaflow-workflow")
+    if (!saved) {
       toast({
         title: "No saved workflow",
         description: "There is no workflow saved in your browser",
@@ -159,23 +114,24 @@ export default function WorkflowBuilder() {
     }
 
     try {
-      const { nodes: savedNodes, edges: savedEdges } = JSON.parse(savedWorkflow)
+      const { nodes: savedNodes, edges: savedEdges } = JSON.parse(saved)
       setNodes(savedNodes)
       setEdges(savedEdges)
       toast({
         title: "Workflow loaded",
-        description: "Your workflow has been loaded successfully",
+        description: "Your learning pathway has been loaded",
       })
-    } catch (error) {
+    } catch {
       toast({
         title: "Error loading workflow",
         description: "There was an error loading your workflow",
         variant: "destructive",
       })
     }
-  }
+  }, [setNodes, setEdges])
 
-  const executeWorkflow = () => {
+  // Execute workflow
+  const executeWorkflow = useCallback(() => {
     if (nodes.length === 0) {
       toast({
         title: "Nothing to execute",
@@ -184,83 +140,151 @@ export default function WorkflowBuilder() {
       })
       return
     }
+    setIsExecutionPanelExpanded(true)
+    execution.execute()
+  }, [nodes, execution])
 
-    toast({
-      title: "Executing workflow",
-      description: "Your workflow is being executed (simulation only in this MVP)",
-    })
-
-    // In a real implementation, we would traverse the graph and execute each node
-    // For the MVP, we'll just simulate execution with a success message
-    setTimeout(() => {
-      toast({
-        title: "Workflow executed",
-        description: "Your workflow has been executed successfully",
-      })
-    }, 2000)
-  }
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "s") {
+        e.preventDefault()
+        saveWorkflow()
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [saveWorkflow])
 
   return (
-    <div className="flex h-screen">
-      <div className="w-64 border-r border-gray-200 p-4 bg-gray-50">
-        <h2 className="text-lg font-semibold mb-4">Node Library</h2>
-        <NodeLibrary />
-      </div>
+    <ReactFlowProvider>
+      <div className="flex flex-col h-screen bg-background">
+        {/* Header */}
+        <header className="flex items-center justify-between px-4 py-2 border-b bg-card">
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
+                <GraduationCap className="h-5 w-5 text-primary-foreground" />
+              </div>
+              <div>
+                <h1 className="text-lg font-bold text-foreground">LinguaFlow</h1>
+                <p className="text-xs text-muted-foreground">Learning Pathway Builder</p>
+              </div>
+            </div>
+          </div>
 
-      <div className="flex-1 flex flex-col">
-        <div className="flex-1" ref={reactFlowWrapper}>
-          <ReactFlowProvider>
-            <ReactFlow
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" className="hidden sm:flex">
+              <Eye className="h-4 w-4 mr-2" />
+              Preview
+            </Button>
+            <Button variant="outline" size="sm" onClick={loadWorkflow}>
+              <Upload className="h-4 w-4 mr-2" />
+              Load
+            </Button>
+            <Button variant="outline" size="sm" onClick={saveWorkflow}>
+              <Save className="h-4 w-4 mr-2" />
+              Save
+            </Button>
+            <Button size="sm" onClick={executeWorkflow}>
+              <Play className="h-4 w-4 mr-2" />
+              Run
+            </Button>
+          </div>
+        </header>
+
+        {/* Main Content */}
+        <div className="flex flex-1 overflow-hidden">
+          {/* Left Sidebar - Node Palette */}
+          <aside
+            className={cn(
+              "border-r bg-card transition-all duration-200",
+              isPaletteOpen ? "w-72" : "w-0"
+            )}
+          >
+            {isPaletteOpen && (
+              <div className="flex flex-col h-full">
+                <div className="flex items-center justify-between p-3 border-b">
+                  <h2 className="font-semibold text-sm">Node Library</h2>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-7 w-7 lg:hidden"
+                    onClick={() => setIsPaletteOpen(false)}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+                <NodePalette />
+              </div>
+            )}
+          </aside>
+
+          {/* Toggle button for palette (mobile) */}
+          {!isPaletteOpen && (
+            <Button
+              variant="outline"
+              size="icon"
+              className="absolute left-2 top-20 z-10 lg:hidden"
+              onClick={() => setIsPaletteOpen(true)}
+            >
+              <Menu className="h-4 w-4" />
+            </Button>
+          )}
+
+          {/* Canvas */}
+          <main className="flex-1 flex flex-col overflow-hidden">
+            <WorkflowCanvas
               nodes={nodes}
               edges={edges}
               onNodesChange={onNodesChange}
               onEdgesChange={onEdgesChange}
-              onConnect={onConnect}
-              onInit={setReactFlowInstance}
-              onDrop={onDrop}
-              onDragOver={onDragOver}
-              onNodeClick={onNodeClick}
-              onPaneClick={onPaneClick}
-              nodeTypes={nodeTypes}
-              edgeTypes={edgeTypes}
-              fitView
-              snapToGrid
-              snapGrid={[15, 15]}
-              defaultEdgeOptions={{ type: "custom" }}
-            >
-              <Background />
-              <Controls />
-              <MiniMap />
-              <Panel position="top-right">
-                <div className="flex gap-2">
-                  <Button onClick={saveWorkflow} size="sm" variant="outline">
-                    <Save className="h-4 w-4 mr-2" />
-                    Save
-                  </Button>
-                  <Button onClick={loadWorkflow} size="sm" variant="outline">
-                    <Upload className="h-4 w-4 mr-2" />
-                    Load
-                  </Button>
-                  <Button onClick={executeWorkflow} size="sm" variant="default">
-                    <Play className="h-4 w-4 mr-2" />
-                    Execute
-                  </Button>
-                </div>
-              </Panel>
-            </ReactFlow>
-          </ReactFlowProvider>
+              setNodes={setNodes}
+              setEdges={setEdges}
+              onNodeSelect={handleNodeSelect}
+              selectedNodeId={selectedNode?.id}
+              executingNodeId={execution.currentNodeId}
+            />
+
+            {/* Execution Panel */}
+            <ExecutionPanel
+              executionStatus={execution.status}
+              currentNodeId={execution.currentNodeId}
+              progress={execution.progress}
+              logs={execution.logs}
+              streamingContent={execution.streamingContent}
+              onExecute={execution.execute}
+              onPause={execution.pause}
+              onResume={execution.resume}
+              onCancel={execution.cancel}
+              onClear={execution.clear}
+              isExpanded={isExecutionPanelExpanded}
+              onToggleExpand={() => setIsExecutionPanelExpanded(!isExecutionPanelExpanded)}
+            />
+          </main>
+
+          {/* Right Sidebar - Node Inspector */}
+          <aside
+            className={cn(
+              "border-l bg-card transition-all duration-200",
+              isInspectorOpen && selectedNode ? "w-80" : "w-0"
+            )}
+          >
+            {isInspectorOpen && selectedNode && (
+              <NodeInspector
+                node={selectedNode}
+                onUpdateNodeData={updateNodeData}
+                onClose={() => {
+                  setSelectedNode(null)
+                  setIsInspectorOpen(false)
+                }}
+              />
+            )}
+          </aside>
         </div>
       </div>
-
-      {selectedNode && (
-        <div className="w-80 border-l border-gray-200 p-4 bg-gray-50">
-          <NodeConfigPanel
-            node={selectedNode as WorkflowNode}
-            updateNodeData={updateNodeData}
-            onClose={() => setSelectedNode(null)}
-          />
-        </div>
-      )}
-    </div>
+    </ReactFlowProvider>
   )
 }
+
+export default WorkflowBuilder
