@@ -16,8 +16,9 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files
+# env files (keep .env.example for documentation)
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -25,3 +26,14 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# test results and reports
+/playwright-report/
+/test-results/
+/coverage/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo

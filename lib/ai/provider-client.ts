@@ -172,12 +172,14 @@ export async function generateAIResponse(request: AIRequest): Promise<AIResponse
       } : undefined,
     }
   } catch (error) {
-    console.error(`AI provider error (${provider}):`, error)
+    // Log error only in development
+    if (process.env.NODE_ENV === "development") {
+      console.error(`AI provider error (${provider}):`, error)
+    }
     
     // Try failover to another provider
     const fallbackProvider = getBestAvailableProvider()
     if (fallbackProvider && fallbackProvider !== provider) {
-      console.log(`Attempting failover from ${provider} to ${fallbackProvider}`)
       return generateAIResponse({ ...request, provider: fallbackProvider })
     }
 
@@ -227,8 +229,10 @@ export async function* streamAIResponse(request: AIRequest): AsyncGenerator<stri
       yield textPart
     }
   } catch (error) {
-    console.error(`AI streaming error (${provider}):`, error)
-    yield `Error: ${String(error)}`
+    if (process.env.NODE_ENV === "development") {
+      console.error(`AI streaming error (${provider}):`, error)
+    }
+    yield `Error: ${error instanceof Error ? error.message : "Unknown error"}`
   }
 }
 

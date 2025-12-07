@@ -256,8 +256,8 @@ export async function PATCH(request: Request) {
           })
 
         if (error) {
-          // If the upsert fails due to missing constraint, just log it
-          console.warn("Activity tracking upsert warning:", error.message)
+          // Upsert may fail if table/constraint doesn't exist yet
+          // This is non-critical - activity tracking is best-effort
         }
 
         return NextResponse.json({ activity })

@@ -124,8 +124,8 @@ export async function checkBudgetAlerts(teacherId: string): Promise<BudgetAlert[
     }
 
     return alerts
-  } catch (error) {
-    console.error("Error checking budget alerts:", error)
+  } catch {
+    // Silently fail - alerts are non-critical
     return []
   }
 }
@@ -146,8 +146,8 @@ export async function incrementUsage(teacherId: string): Promise<void> {
 
     // Check alerts after incrementing
     await checkBudgetAlerts(teacherId)
-  } catch (error) {
-    console.error("Error incrementing usage:", error)
+  } catch {
+    // Silently fail - usage tracking is non-critical
   }
 }
 
@@ -169,8 +169,8 @@ export async function getUnreadAlerts(teacherId: string): Promise<BudgetAlert[]>
     if (error) throw error
 
     return data as BudgetAlert[]
-  } catch (error) {
-    console.error("Error fetching alerts:", error)
+  } catch {
+    // Return empty array on error - alerts are non-critical
     return []
   }
 }
@@ -186,7 +186,7 @@ export async function markAlertRead(alertId: string): Promise<void> {
       .from("teacher_alerts")
       .update({ read: true })
       .eq("id", alertId)
-  } catch (error) {
-    console.error("Error marking alert as read:", error)
+  } catch {
+    // Silently fail - marking as read is non-critical
   }
 }

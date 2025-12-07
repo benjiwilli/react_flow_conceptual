@@ -1,10 +1,26 @@
 /**
  * Next.js Middleware
  * Handles authentication and route protection
+ * Supports demo mode when Supabase is not configured
  */
 
 import { createServerClient } from "@supabase/ssr"
 import { NextResponse, type NextRequest } from "next/server"
+
+// Check if Supabase is properly configured
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL
+const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+const isSupabaseConfigured = Boolean(
+  SUPABASE_URL && 
+  SUPABASE_ANON_KEY && 
+  SUPABASE_URL !== "https://your-project.supabase.co" &&
+  SUPABASE_ANON_KEY !== "your-anon-key-here"
+)
+
+// Demo mode placeholder URL
+const DEMO_URL = "https://demo.supabase.co"
+const DEMO_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRlbW8iLCJyb2xlIjoiYW5vbiIsImlhdCI6MTYwMDAwMDAwMCwiZXhwIjoxOTAwMDAwMDAwfQ.demo-placeholder-key"
 
 // Public paths that don't require authentication
 const PUBLIC_PATHS = [
@@ -35,9 +51,14 @@ export async function middleware(request: NextRequest) {
     },
   })
 
+  // In demo mode, skip all auth checks and allow all routes
+  if (!isSupabaseConfigured || process.env.NEXT_PUBLIC_DEMO_MODE === "true") {
+    return response
+  }
+
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    SUPABASE_URL!,
+    SUPABASE_ANON_KEY!,
     {
       cookies: {
         getAll() {

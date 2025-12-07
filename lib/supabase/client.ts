@@ -47,8 +47,7 @@ export function createServerClient() {
     return null
   }
   
-  console.warn(
-    "[Supabase] Using anon key for server client - set SUPABASE_SERVICE_ROLE_KEY for production"
-  )
+  // Demo mode: using anon key (RLS policies will restrict access)
+  // For production, set SUPABASE_SERVICE_ROLE_KEY
   return createClient(url, anonKey)
 }

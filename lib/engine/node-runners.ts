@@ -1427,6 +1427,302 @@ function generateScaffoldingForLevel(elpaLevel: number): { elements: string[]; i
 }
 
 // ============================================================================
+// Additional ESL Nodes
+// ============================================================================
+
+/**
+ * Reading Passage Node Runner
+ * Generates leveled reading passages
+ */
+export const runReadingPassageNode: NodeRunner = async (node, input, context) => {
+  const config = node.data.config as Record<string, unknown>
+  const elpaLevel = context.currentLanguageLevel
+  const genre = (config.genre as string) || "narrative"
+  const topic = (input.topic as string) || (config.topic as string) || "everyday activities"
+  const targetWordCount = (config.targetWordCount as number) || 200
+
+  try {
+    const systemPrompt = `You are an ESL reading passage generator for Alberta K-12 students.
+Generate a ${genre} passage that is:
+- Appropriate for ELPA Level ${elpaLevel}
+- About ${targetWordCount} words long
+- Culturally inclusive and engaging
+- Age-appropriate for Grade ${context.studentProfile.gradeLevel} students
+
+For ELPA Level ${elpaLevel}:
+${elpaLevel <= 2 ? "Use simple sentences, present tense, basic vocabulary, and repetitive structures." : ""}
+${elpaLevel === 3 ? "Use compound sentences, some past tense, and moderately complex vocabulary." : ""}
+${elpaLevel >= 4 ? "Use complex sentences, varied tenses, and academic vocabulary." : ""}`
+
+    const prompt = `Generate a ${genre} passage about "${topic}".
+Include a title and the passage text.
+At the end, list 5 key vocabulary words from the passage.`
+
+    const result = await generateTextCompletion({
+      prompt,
+      system: systemPrompt,
+      temperature: 0.7,
+    })
+
+    // Parse passage and vocabulary
+    const text = result.text
+    const vocabMatch = text.match(/(?:vocabulary|key words|words to know)[:.]?\s*([\s\S]*?)$/i)
+    let passage = text
+    let vocabulary: string[] = []
+
+    if (vocabMatch) {
+      passage = text.substring(0, text.indexOf(vocabMatch[0])).trim()
+      vocabulary = vocabMatch[1]
+        .split(/[,\n]/)
+        .map((w) => w.replace(/^[-•*\d.]+\s*/, "").trim())
+        .filter((w) => w.length > 0)
+        .slice(0, 5)
+    }
+
+    return {
+      output: {
+        passage,
+        vocabulary,
+        genre,
+        wordCount: passage.split(/\s+/).length,
+        readabilityLevel: elpaLevel,
+        generatedByAI: true,
+      },
+    }
+  } catch {
+    // Mock fallback
+    const mockPassages: Record<number, string> = {
+      1: "The cat sits. The cat is big. I see the cat. The cat is my friend.",
+      2: "Maria has a dog. The dog is brown. Maria likes to play with her dog. They play in the park every day.",
+      3: "The community garden brings neighbors together. Every Saturday, families come to plant vegetables and flowers. Children learn about growing food while making new friends.",
+      4: "Immigration has shaped Alberta's diverse communities for generations. Newcomers from around the world bring unique traditions, languages, and perspectives that enrich our province's cultural fabric.",
+      5: "The intersection of technology and education presents both opportunities and challenges for contemporary learners. As digital literacy becomes increasingly essential, educators must balance traditional pedagogical approaches with innovative methodologies.",
+    }
+
+    return {
+      output: {
+        passage: mockPassages[elpaLevel] || mockPassages[3],
+        vocabulary: ["community", "garden", "neighbors", "vegetables", "friends"],
+        genre,
+        wordCount: 30,
+        readabilityLevel: elpaLevel,
+        generatedByAI: false,
+      },
+    }
+  }
+}
+
+/**
+ * Comprehensible Input Node Runner
+ * Applies Krashen's i+1 theory
+ */
+export const runComprehensibleInputNode: NodeRunner = async (node, input, context) => {
+  const config = node.data.config as Record<string, unknown>
+  const content = (input.content as string) || ""
+  const elpaLevel = context.currentLanguageLevel
+
+  // Determine target level (i+1)
+  const targetLevel = Math.min(elpaLevel + 1, 5)
+
+  // Generate adjustments based on the i+1 principle
+  const adjustments = {
+    visualSupports: config.includeVisualSupports !== false,
+    contextClues: config.includeContextClues !== false,
+    keyVocabulary: config.highlightKeyVocabulary !== false,
+  }
+
+  // Scaffolding appropriate for moving from current to target level
+  const scaffoldingElements = generateScaffoldingForLevel(elpaLevel)
+
+  return {
+    output: {
+      originalContent: content,
+      adjustedContent: content, // In production, this would be AI-adjusted
+      currentLevel: elpaLevel,
+      targetLevel,
+      adjustments,
+      scaffolding: scaffoldingElements,
+      comprehensibleInputApplied: true,
+    },
+  }
+}
+
+/**
+ * Speaking Assessment Node Runner
+ * Evaluates oral language production
+ */
+export const runSpeakingAssessmentNode: NodeRunner = async (node, input, _context) => {
+  const config = node.data.config as Record<string, unknown>
+
+  return {
+    output: {
+      prompt: (input.prompt as string) || (config.prompt as string) || "Please read the sentence aloud:",
+      taskType: (config.taskType as string) || "read-aloud",
+      assessmentCriteria: {
+        pronunciation: config.assessPronunciation !== false,
+        fluency: config.assessFluency !== false,
+        vocabulary: config.assessVocabulary === true,
+        grammar: config.assessGrammar === true,
+      },
+      modelResponseAvailable: config.provideModelResponse !== false,
+      practiceAllowed: config.allowPracticeFirst !== false,
+      recordingTimeLimit: (config.recordingTimeLimit as number) || 60,
+    },
+    shouldPause: true, // Pause for voice recording
+  }
+}
+
+// ============================================================================
+// Additional Numeracy Nodes
+// ============================================================================
+
+/**
+ * Math Vocabulary Node Runner
+ * Teaches mathematical vocabulary with L1 support
+ */
+export const runMathVocabularyNode: NodeRunner = async (node, input, context) => {
+  const config = node.data.config as Record<string, unknown>
+  const topic = (input.topic as string) || (config.topic as string) || "operations"
+  const nativeLanguage = context.studentProfile.nativeLanguage as string || "mandarin"
+
+  // Math vocabulary by topic with translations
+  const mathVocabulary: Record<string, Array<{ word: string; definition: string; example: string; translations: Record<string, string> }>> = {
+    operations: [
+      { word: "add", definition: "Put numbers together", example: "3 + 2 = 5", translations: { mandarin: "加", spanish: "sumar", arabic: "جمع" } },
+      { word: "subtract", definition: "Take away", example: "5 - 2 = 3", translations: { mandarin: "减", spanish: "restar", arabic: "طرح" } },
+      { word: "multiply", definition: "Add a number many times", example: "3 × 4 = 12", translations: { mandarin: "乘", spanish: "multiplicar", arabic: "ضرب" } },
+      { word: "divide", definition: "Split into equal parts", example: "12 ÷ 4 = 3", translations: { mandarin: "除", spanish: "dividir", arabic: "قسمة" } },
+    ],
+    "word-problems": [
+      { word: "total", definition: "The whole amount", example: "What is the total?", translations: { mandarin: "总数", spanish: "total", arabic: "المجموع" } },
+      { word: "left", definition: "What remains", example: "How many are left?", translations: { mandarin: "剩余", spanish: "quedan", arabic: "المتبقي" } },
+      { word: "each", definition: "Every one", example: "Each child gets 3", translations: { mandarin: "每个", spanish: "cada", arabic: "كل" } },
+      { word: "share", definition: "Divide equally", example: "Share among friends", translations: { mandarin: "分享", spanish: "compartir", arabic: "مشاركة" } },
+    ],
+  }
+
+  const vocabulary = (mathVocabulary[topic] || mathVocabulary.operations).map((item) => ({
+    ...item,
+    l1Translation: item.translations[nativeLanguage] || item.translations.mandarin,
+  }))
+
+  return {
+    output: {
+      vocabulary,
+      topic,
+      includesL1: true,
+      targetLanguage: nativeLanguage,
+    },
+  }
+}
+
+/**
+ * Step-by-Step Solver Node Runner
+ * Breaks down math problems into steps
+ */
+export const runStepByStepSolverNode: NodeRunner = async (node, input, context) => {
+  const config = node.data.config as Record<string, unknown>
+  const problem = input.problem as Record<string, unknown> || {}
+  const elpaLevel = context.currentLanguageLevel
+
+  // Extract problem details
+  const problemText = (problem.text as string) || "Solve the math problem"
+  const operation = (problem.operation as string) || "addition"
+  const numbers = (problem.numbers as number[]) || [5, 3]
+
+  // Generate step-by-step solution
+  const steps: Array<{ step: number; instruction: string; visual?: string; languageSupport?: string }> = []
+
+  if (operation === "subtraction") {
+    steps.push(
+      { step: 1, instruction: "Read the problem carefully", visual: "📖", languageSupport: elpaLevel <= 2 ? "Find the important words" : undefined },
+      { step: 2, instruction: `Start with the bigger number: ${numbers[0]}`, visual: `🔢 ${numbers[0]}` },
+      { step: 3, instruction: `Take away the smaller number: ${numbers[1]}`, visual: `➖ ${numbers[1]}`, languageSupport: elpaLevel <= 2 ? "'Take away' means subtract" : undefined },
+      { step: 4, instruction: `Count what's left: ${numbers[0]} - ${numbers[1]} = ${numbers[0] - numbers[1]}`, visual: `✅ ${numbers[0] - numbers[1]}` }
+    )
+  } else {
+    // Addition default
+    steps.push(
+      { step: 1, instruction: "Read the problem carefully", visual: "📖" },
+      { step: 2, instruction: `Start with the first number: ${numbers[0]}`, visual: `🔢 ${numbers[0]}` },
+      { step: 3, instruction: `Add the second number: ${numbers[1]}`, visual: `➕ ${numbers[1]}`, languageSupport: elpaLevel <= 2 ? "'Add' means put together" : undefined },
+      { step: 4, instruction: `Find the total: ${numbers[0]} + ${numbers[1]} = ${numbers[0] + numbers[1]}`, visual: `✅ ${numbers[0] + numbers[1]}` }
+    )
+  }
+
+  const answer = operation === "subtraction" ? numbers[0] - numbers[1] : numbers[0] + numbers[1]
+
+  return {
+    output: {
+      problemText,
+      steps,
+      answer,
+      operation,
+      showVisuals: config.showVisualRepresentation !== false,
+      showLanguageSupport: config.showLanguageSupport !== false,
+    },
+  }
+}
+
+/**
+ * Visual Math Node Runner
+ * Provides visual representations
+ */
+export const runVisualMathNode: NodeRunner = async (node, input, _context) => {
+  const config = node.data.config as Record<string, unknown>
+  const problem = input.problem as Record<string, unknown> || {}
+  const visualType = (config.visualType as string) || "number-line"
+
+  const numbers = (problem.numbers as number[]) || [10, 3]
+  const operation = (problem.operation as string) || "subtraction"
+
+  // Generate visual representation description
+  let visual: { type: string; description: string; elements: string[] }
+
+  switch (visualType) {
+    case "number-line":
+      visual = {
+        type: "number-line",
+        description: `Number line from 0 to ${Math.max(...numbers) + 5}`,
+        elements: operation === "subtraction"
+          ? [`Start at ${numbers[0]}`, `Jump back ${numbers[1]} spaces`, `Land on ${numbers[0] - numbers[1]}`]
+          : [`Start at ${numbers[0]}`, `Jump forward ${numbers[1]} spaces`, `Land on ${numbers[0] + numbers[1]}`],
+      }
+      break
+    case "base-ten-blocks":
+      visual = {
+        type: "base-ten-blocks",
+        description: `Base-ten blocks showing ${numbers[0]}`,
+        elements: [`${Math.floor(numbers[0] / 10)} tens blocks`, `${numbers[0] % 10} ones blocks`],
+      }
+      break
+    case "array":
+      visual = {
+        type: "array",
+        description: `Array representation`,
+        elements: [`${numbers[0]} rows`, `${numbers[1]} columns`, `${numbers[0] * numbers[1]} total`],
+      }
+      break
+    default:
+      visual = {
+        type: "generic",
+        description: `Visual representation of ${operation}`,
+        elements: numbers.map((n) => `${n} objects`),
+      }
+  }
+
+  return {
+    output: {
+      visual,
+      visualType,
+      interactive: config.interactive !== false,
+      showAnnotations: config.showAnnotations !== false,
+      problem,
+    },
+  }
+}
+
+// ============================================================================
 // Node Runner Registry
 // ============================================================================
 
@@ -1436,12 +1732,17 @@ export const nodeRunners: Record<string, NodeRunner> = {
   "curriculum-selector": runCurriculumSelectorNode,
   "content-generator": runContentGeneratorNode,
   "vocabulary-builder": runVocabularyBuilderNode,
+  "reading-passage": runReadingPassageNode,
+  "math-vocabulary": runMathVocabularyNode,
   
   // Scaffolding Nodes
   "scaffolded-content": runScaffoldedContentNode,
   "l1-bridge": runL1BridgeNode,
   scaffolding: runScaffoldingNode,
   "visual-support": runVisualSupportNode,
+  "comprehensible-input": runComprehensibleInputNode,
+  "step-by-step-solver": runStepByStepSolverNode,
+  "visual-math": runVisualMathNode,
   
   // AI Nodes
   "ai-model": runAIModelNode,
@@ -1456,6 +1757,7 @@ export const nodeRunners: Record<string, NodeRunner> = {
   "multiple-choice": runMultipleChoiceNode,
   "free-response": runFreeResponseNode,
   "oral-practice": runOralPracticeNode,
+  "speaking-assessment": runSpeakingAssessmentNode,
   
   // Flow Control Nodes
   router: runRouterNode,

@@ -291,12 +291,14 @@ export default function ClassroomPage() {
   }
 
   const handleSendMessage = (studentId: string) => {
-    // TODO: Implement message sending via sendToStudent from useClassroomRealtime
+    // Message sending requires Supabase Realtime subscription
+    // In demo mode, this is a placeholder. See useClassroomRealtime hook for implementation.
     void studentId
   }
 
   const handleProvideHint = (studentId: string) => {
-    // TODO: Implement hint sending via sendToStudent from useClassroomRealtime
+    // Hint delivery requires Supabase Realtime subscription
+    // In demo mode, this is a placeholder. See useClassroomRealtime hook for implementation.
     void studentId
   }
 

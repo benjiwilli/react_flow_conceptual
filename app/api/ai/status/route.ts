@@ -5,6 +5,7 @@
 
 import { NextResponse } from "next/server"
 import { getAllProviderStatuses, getBestAvailableProvider } from "@/lib/ai/provider-config"
+import { logger } from "@/lib/logger"
 
 export async function GET() {
   try {
@@ -17,7 +18,7 @@ export async function GET() {
       aiAvailable: activeProvider !== null && activeProvider !== "mock",
     })
   } catch (error) {
-    console.error("Failed to get AI status:", error)
+    logger.error("Failed to get AI status", error)
     return NextResponse.json(
       { error: "Failed to get AI status" },
       { status: 500 }

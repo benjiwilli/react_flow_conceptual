@@ -64,8 +64,7 @@ export async function withAuth(
     }) as AuthenticatedRequest
 
     return handler(authReq)
-  } catch (error) {
-    console.error("Authentication error:", error)
+  } catch {
     return NextResponse.json(
       { error: "Authentication failed", message: "Unable to verify credentials" },
       { status: 401 }

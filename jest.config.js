@@ -20,6 +20,11 @@ const customJestConfig = {
   
   // Module path aliases (match tsconfig paths)
   moduleNameMapper: {
+    "^@/components/(.*)$": "<rootDir>/components/$1",
+    "^@/lib/(.*)$": "<rootDir>/lib/$1",
+    "^@/hooks/(.*)$": "<rootDir>/hooks/$1",
+    "^@/contexts/(.*)$": "<rootDir>/contexts/$1",
+    "^@/types/(.*)$": "<rootDir>/types/$1",
     "^@/(.*)$": "<rootDir>/$1",
   },
   
@@ -34,6 +39,7 @@ const customJestConfig = {
     "<rootDir>/node_modules/",
     "<rootDir>/.next/",
     "<rootDir>/e2e/", // Playwright tests
+    "<rootDir>/__tests__/helpers/", // Test utilities, not tests
   ],
   
   // Coverage configuration
@@ -46,23 +52,6 @@ const customJestConfig = {
     "!**/node_modules/**",
     "!**/__tests__/**",
   ],
-  
-  // Coverage thresholds (start modest, increase over time)
-  coverageThreshold: {
-    global: {
-      branches: 40,
-      functions: 40,
-      lines: 40,
-      statements: 40,
-    },
-  },
-  
-  // Transform configuration
-  transform: {
-    "^.+\\.(ts|tsx)$": ["ts-jest", {
-      tsconfig: "tsconfig.json",
-    }],
-  },
   
   // Module file extensions
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],

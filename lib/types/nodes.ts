@@ -29,6 +29,8 @@ export type LearningNodeType =
   | "content-generator"
   | "math-problem-generator"
   | "vocabulary-builder"
+  | "reading-passage"
+  | "math-vocabulary"
 
 export type AINodeType = "ai-model" | "prompt-template" | "structured-output"
 
@@ -37,7 +39,8 @@ export type ScaffoldingNodeType =
   | "l1-bridge"
   | "visual-support"
   | "comprehensible-input"
-  | "reading-passage"
+  | "step-by-step-solver"
+  | "visual-math"
 
 export type InteractionNodeType =
   | "human-input"

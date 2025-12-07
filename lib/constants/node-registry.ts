@@ -31,6 +31,9 @@ import type {
   ProgressTrackerNodeData,
   FeedbackNodeData,
   CelebrationNodeData,
+  ReadingPassageNodeData,
+  ComprehensibleInputNodeData,
+  SpeakingAssessmentNodeData,
 } from "@/lib/types/nodes"
 
 // ============================================================================
@@ -1044,6 +1047,272 @@ export const NODE_REGISTRY: NodeTypeConfig[] = [
         id: "celebrated",
         label: "Celebration Shown",
         type: "boolean",
+        required: true,
+      },
+    ],
+  },
+
+  // -------------------------------------------------------------------------
+  // Additional ESL Nodes (Reading & Speaking)
+  // -------------------------------------------------------------------------
+  {
+    type: "reading-passage",
+    category: "learning",
+    label: "Reading Passage",
+    description: "Generate leveled reading passages with comprehension supports",
+    icon: "FileText",
+    color: "blue",
+    defaultData: {
+      label: "Reading Passage",
+      category: "scaffolding",
+      isConfigured: false,
+      genre: "narrative",
+      length: "medium",
+      readabilityTarget: "auto",
+      includeComprehensionQuestions: true,
+      highlightVocabulary: true,
+      audioVersion: false,
+    } as Partial<ReadingPassageNodeData>,
+    inputs: [
+      {
+        id: "student",
+        label: "Student Context",
+        type: "student-context",
+        required: true,
+      },
+      {
+        id: "topic",
+        label: "Topic",
+        type: "string",
+        required: false,
+      },
+    ],
+    outputs: [
+      {
+        id: "passage",
+        label: "Reading Passage",
+        type: "content",
+        required: true,
+      },
+      {
+        id: "vocabulary",
+        label: "Highlighted Vocabulary",
+        type: "array",
+        required: false,
+      },
+    ],
+  },
+  {
+    type: "comprehensible-input",
+    category: "scaffolding",
+    label: "Comprehensible Input",
+    description: "Apply Krashen's i+1 theory to make content comprehensible",
+    icon: "Target",
+    color: "emerald",
+    defaultData: {
+      label: "Comprehensible Input",
+      category: "scaffolding",
+      isConfigured: false,
+      inputMode: "text",
+      adjustToLevel: true,
+      repeatOption: true,
+      slowdownOption: true,
+      highlightKeywords: true,
+    } as Partial<ComprehensibleInputNodeData>,
+    inputs: [
+      {
+        id: "content",
+        label: "Content",
+        type: "content",
+        required: true,
+      },
+      {
+        id: "student",
+        label: "Student Context",
+        type: "student-context",
+        required: true,
+      },
+    ],
+    outputs: [
+      {
+        id: "adjustedContent",
+        label: "Adjusted Content",
+        type: "content",
+        required: true,
+      },
+    ],
+  },
+  {
+    type: "speaking-assessment",
+    category: "output",
+    label: "Speaking Assessment",
+    description: "Evaluate oral language production with pronunciation and fluency feedback",
+    icon: "Mic2",
+    color: "teal",
+    defaultData: {
+      label: "Speaking Assessment",
+      category: "output",
+      isConfigured: false,
+      assessmentType: "full",
+      recordResponse: true,
+      provideFeedback: true,
+      rubric: {
+        criteria: [
+          { name: "Pronunciation", weight: 30, levels: [] },
+          { name: "Fluency", weight: 40, levels: [] },
+          { name: "Comprehension", weight: 30, levels: [] },
+        ],
+        scoringType: "analytic",
+        maxScore: 100,
+      },
+    } as Partial<SpeakingAssessmentNodeData>,
+    inputs: [
+      {
+        id: "prompt",
+        label: "Speaking Prompt",
+        type: "string",
+        required: true,
+      },
+      {
+        id: "student",
+        label: "Student Context",
+        type: "student-context",
+        required: false,
+      },
+    ],
+    outputs: [
+      {
+        id: "transcription",
+        label: "Transcription",
+        type: "string",
+        required: true,
+      },
+      {
+        id: "assessment",
+        label: "Assessment Result",
+        type: "object",
+        required: true,
+      },
+    ],
+  },
+
+  // -------------------------------------------------------------------------
+  // Additional Numeracy Nodes
+  // -------------------------------------------------------------------------
+  {
+    type: "math-vocabulary",
+    category: "learning",
+    label: "Math Vocabulary",
+    description: "Teach mathematical vocabulary with L1 support and visual representations",
+    icon: "Calculator",
+    color: "blue",
+    defaultData: {
+      label: "Math Vocabulary",
+      category: "learning",
+      isConfigured: false,
+      maxWords: 10,
+      includeL1Translations: true,
+      includeVisuals: true,
+      includeAudio: false,
+      focusType: "content-specific",
+      contextSentences: true,
+    } as Partial<VocabularyBuilderNodeData>,
+    inputs: [
+      {
+        id: "student",
+        label: "Student Context",
+        type: "student-context",
+        required: true,
+      },
+      {
+        id: "topic",
+        label: "Math Topic",
+        type: "string",
+        required: false,
+      },
+    ],
+    outputs: [
+      {
+        id: "vocabulary",
+        label: "Math Vocabulary Set",
+        type: "array",
+        required: true,
+      },
+    ],
+  },
+  {
+    type: "step-by-step-solver",
+    category: "scaffolding",
+    label: "Step-by-Step Solver",
+    description: "Break down math problems into manageable steps with language support",
+    icon: "ListOrdered",
+    color: "emerald",
+    defaultData: {
+      label: "Step-by-Step Solver",
+      category: "scaffolding",
+      isConfigured: false,
+      scaffoldingType: "add-supports",
+      preserveMeaning: true,
+      scaffoldElements: ["visual-supports", "hints", "examples"],
+      autoAdjust: true,
+    } as Partial<ScaffoldingNodeData>,
+    inputs: [
+      {
+        id: "problem",
+        label: "Math Problem",
+        type: "object",
+        required: true,
+      },
+      {
+        id: "student",
+        label: "Student Context",
+        type: "student-context",
+        required: true,
+      },
+    ],
+    outputs: [
+      {
+        id: "steps",
+        label: "Solution Steps",
+        type: "array",
+        required: true,
+      },
+      {
+        id: "answer",
+        label: "Final Answer",
+        type: "string",
+        required: true,
+      },
+    ],
+  },
+  {
+    type: "visual-math",
+    category: "scaffolding",
+    label: "Visual Math",
+    description: "Provide visual representations of mathematical concepts",
+    icon: "Shapes",
+    color: "emerald",
+    defaultData: {
+      label: "Visual Math",
+      category: "scaffolding",
+      isConfigured: false,
+      visualType: "diagram",
+      generationMethod: "ai-generated",
+      altTextRequired: true,
+    } as Partial<VisualSupportNodeData>,
+    inputs: [
+      {
+        id: "problem",
+        label: "Math Problem",
+        type: "object",
+        required: true,
+      },
+    ],
+    outputs: [
+      {
+        id: "visual",
+        label: "Visual Representation",
+        type: "object",
         required: true,
       },
     ],

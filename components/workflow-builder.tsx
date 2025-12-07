@@ -29,6 +29,7 @@ import { NodeInspector } from "@/components/builder/node-inspector"
 import { ExecutionPanel, useExecutionPanel } from "@/components/builder/execution-panel"
 import { TemplateBrowser } from "@/components/builder/template-browser"
 import { PreviewPanel } from "@/components/builder/preview-panel"
+import { HighContrastToggle } from "@/components/accessibility/high-contrast-toggle"
 import type { LinguaFlowWorkflow } from "@/lib/types/workflow"
 import type { StudentProfile } from "@/lib/types/student"
 import { WorkflowCanvas } from "@/components/builder/workflow-canvas"
@@ -241,6 +242,9 @@ export function WorkflowBuilder({ initialWorkflow }: WorkflowBuilderProps) {
           </div>
 
           <div className="flex items-center gap-2">
+            <div className="hidden md:flex mr-2">
+              <HighContrastToggle />
+            </div>
             <Button
               variant={showTemplates ? "secondary" : "outline"}
               size="sm"
