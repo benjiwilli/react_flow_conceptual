@@ -17,7 +17,6 @@ import {
   ArrowLeft,
   Volume2,
   VolumeX,
-  HelpCircle,
   Send,
   Lightbulb,
   ChevronRight,
@@ -30,11 +29,10 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { Progress } from "@/components/ui/progress"
 import { VoiceRecorder } from "./voice-recorder"
 import { CelebrationOverlay } from "./visual-feedback"
 
-interface LearningContent {
+export interface LearningContent {
   type: "text" | "question" | "multiple-choice" | "voice-prompt" | "visual"
   content: string
   translation?: string
@@ -43,14 +41,14 @@ interface LearningContent {
   audio?: string
 }
 
-interface VocabularyItem {
+export interface VocabularyItem {
   word: string
   definition: string
   translation?: string
   pronunciation?: string
 }
 
-interface QuestionData {
+export interface QuestionData {
   prompt: string
   type: "text" | "number" | "multiple-choice" | "voice"
   options?: { id: string; text: string }[]
@@ -122,30 +120,42 @@ export function LearningInterface({
   }, [onRequestHint])
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 via-white to-blue-50">
+    <div className="min-h-screen bg-slate-50 relative overflow-hidden">
+      {/* Background Decorative Elements */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
+        <div className="absolute -top-[20%] -right-[10%] w-[50%] h-[50%] rounded-full bg-blue-100/50 blur-3xl" />
+        <div className="absolute top-[20%] -left-[10%] w-[40%] h-[40%] rounded-full bg-indigo-100/50 blur-3xl" />
+        <div className="absolute bottom-[10%] right-[20%] w-[30%] h-[30%] rounded-full bg-purple-100/50 blur-3xl" />
+      </div>
+
       {/* Celebration Overlay */}
       {showCelebration && (
         <CelebrationOverlay onComplete={() => setShowCelebration(false)} />
       )}
 
       {/* Header */}
-      <header className="sticky top-0 z-10 border-b bg-white/90 backdrop-blur-sm">
-        <div className="container flex h-14 items-center justify-between px-4">
-          <div className="flex items-center gap-3">
+      <header className="sticky top-0 z-10 border-b bg-white/80 backdrop-blur-md transition-all duration-200">
+        <div className="container flex h-16 items-center justify-between px-4 max-w-4xl mx-auto">
+          <div className="flex items-center gap-4">
             <Link
               href="/student"
-              className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+              className="group flex items-center justify-center w-10 h-10 rounded-full bg-slate-100 text-slate-600 hover:bg-blue-100 hover:text-blue-600 transition-colors"
             >
-              <ArrowLeft className="h-5 w-5" />
+              <ArrowLeft className="h-5 w-5 group-hover:-translate-x-0.5 transition-transform" />
             </Link>
-            <span className="font-medium text-lg">Hi, {studentName}!</span>
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-sm">
+                {studentName.charAt(0)}
+              </div>
+              <span className="font-semibold text-lg text-slate-800">Hi, {studentName}!</span>
+            </div>
           </div>
           <div className="flex items-center gap-2">
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setAudioEnabled(!audioEnabled)}
-              className="h-10 w-10"
+              className="h-10 w-10 rounded-full hover:bg-slate-100 text-slate-600"
             >
               {audioEnabled ? (
                 <Volume2 className="h-5 w-5" />
@@ -157,27 +167,35 @@ export function LearningInterface({
               variant="ghost"
               size="icon"
               onClick={handleRequestHint}
-              className="h-10 w-10"
+              className="h-10 w-10 rounded-full hover:bg-amber-50 text-amber-500 hover:text-amber-600"
             >
-              <HelpCircle className="h-5 w-5" />
+              <Lightbulb className={cn("h-5 w-5", showHint ? "fill-current" : "")} />
             </Button>
           </div>
         </div>
         {/* Progress Bar */}
-        <div className="px-4 pb-2">
-          <div className="flex items-center justify-between text-xs text-muted-foreground mb-1">
-            <span>Step {currentStep} of {totalSteps}</span>
-            <span>{Math.round(progress)}%</span>
-          </div>
-          <Progress value={progress} className="h-2" />
+        <div className="px-0 w-full h-1.5 bg-slate-100">
+           <div 
+             className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 transition-all duration-500 ease-out"
+             style={{ width: `${progress}%` }}
+           />
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="container max-w-2xl px-4 py-6">
+      <main className="container max-w-2xl px-4 py-8 mx-auto relative z-1">
+        <div className="mb-6 flex items-center justify-between text-sm text-slate-500 font-medium">
+          <span className="bg-white/50 px-3 py-1 rounded-full border border-slate-200/50 backdrop-blur-sm shadow-sm">
+            Activity {currentStep} of {totalSteps}
+          </span>
+          <span className="bg-white/50 px-3 py-1 rounded-full border border-slate-200/50 backdrop-blur-sm shadow-sm">
+            {Math.round(progress)}% Complete
+          </span>
+        </div>
+
         {/* Content Card */}
-        <Card className="mb-6 overflow-hidden bg-white shadow-sm">
-          <CardContent className="p-6">
+        <Card className="mb-8 overflow-hidden bg-white/90 backdrop-blur-sm shadow-xl border-slate-100 rounded-3xl transition-all duration-300 hover:shadow-2xl">
+          <CardContent className="p-8">
             {isLoading ? (
               <LoadingState />
             ) : isStreaming ? (
@@ -196,43 +214,45 @@ export function LearningInterface({
 
         {/* Question/Input Card */}
         {question && !isLoading && (
-          <Card className="mb-6 overflow-hidden bg-white shadow-sm">
-            <CardContent className="p-6">
-              <QuestionDisplay
-                question={question}
-                answer={answer}
-                selectedOption={selectedOption}
-                showHint={showHint}
-                isRecording={isRecording}
-                onAnswerChange={setAnswer}
-                onOptionSelect={setSelectedOption}
-                onStartRecording={() => setIsRecording(true)}
-                onStopRecording={() => setIsRecording(false)}
-                onVoiceResult={handleVoiceResult}
-                onSubmit={handleSubmit}
-              />
-            </CardContent>
-          </Card>
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <Card className="mb-8 overflow-hidden bg-white shadow-xl border-blue-100 rounded-3xl ring-4 ring-blue-50">
+              <CardContent className="p-8">
+                <QuestionDisplay
+                  question={question}
+                  answer={answer}
+                  selectedOption={selectedOption}
+                  showHint={showHint}
+                  isRecording={isRecording}
+                  onAnswerChange={setAnswer}
+                  onOptionSelect={setSelectedOption}
+                  onStartRecording={() => setIsRecording(true)}
+                  onStopRecording={() => setIsRecording(false)}
+                  onVoiceResult={handleVoiceResult}
+                  onSubmit={handleSubmit}
+                />
+              </CardContent>
+            </Card>
+          </div>
         )}
 
         {/* Navigation */}
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center gap-4 mt-8">
           <Button
-            variant="outline"
+            variant="ghost"
             onClick={onBack}
             disabled={currentStep <= 1}
-            className="h-12 px-6"
+            className="h-14 px-8 rounded-2xl text-slate-500 hover:text-slate-800 hover:bg-white/50"
           >
-            <ArrowLeft className="h-4 w-4 mr-2" />
+            <ArrowLeft className="h-5 w-5 mr-2" />
             Back
           </Button>
           <Button
             onClick={onNext}
             disabled={isLoading || isStreaming}
-            className="h-12 px-6"
+            className="h-14 px-10 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg shadow-blue-200 transition-all hover:scale-105 active:scale-95 text-lg font-semibold"
           >
             Next
-            <ChevronRight className="h-4 w-4 ml-2" />
+            <ChevronRight className="h-5 w-5 ml-2" />
           </Button>
         </div>
       </main>
@@ -285,42 +305,46 @@ interface ContentDisplayProps {
 
 function ContentDisplay({ content, audioEnabled, onPlayAudio }: ContentDisplayProps) {
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Main Content */}
-      <div className="prose prose-lg max-w-none">
-        <p className="text-xl leading-relaxed">{content.content}</p>
+      <div className="prose prose-lg prose-slate max-w-none">
+        <p className="text-2xl leading-relaxed text-slate-800 font-medium">{content.content}</p>
       </div>
 
       {/* Translation (L1 Bridge) */}
       {content.translation && (
-        <div className="p-4 rounded-lg bg-amber-50 border border-amber-200">
-          <p className="text-amber-900" dir="auto">{content.translation}</p>
+        <div className="p-6 rounded-2xl bg-amber-50/80 border border-amber-100 shadow-sm relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-16 h-16 bg-amber-100/50 rounded-full -mr-8 -mt-8 transition-transform group-hover:scale-150 duration-500" />
+          <p className="text-lg text-amber-900 font-medium relative z-10" dir="auto">{content.translation}</p>
         </div>
       )}
 
       {/* Vocabulary */}
       {content.vocabulary && content.vocabulary.length > 0 && (
-        <div className="space-y-3">
-          <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+        <div className="space-y-4">
+          <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest px-1">
             Key Words
           </h4>
-          <div className="grid gap-3">
+          <div className="grid gap-4 sm:grid-cols-2">
             {content.vocabulary.map((item, i) => (
-              <div key={i} className="flex items-start gap-3 p-3 rounded-lg bg-blue-50">
+              <div 
+                key={i} 
+                className="flex items-start gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-100 hover:bg-white hover:shadow-md hover:border-blue-100 transition-all duration-300 group"
+              >
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 shrink-0"
+                  className="h-10 w-10 shrink-0 rounded-full bg-white shadow-sm group-hover:bg-blue-50 group-hover:text-blue-600"
                   onClick={() => onPlayAudio(item.word)}
                   disabled={!audioEnabled}
                 >
-                  <Volume2 className="h-4 w-4" />
+                  <Volume2 className="h-5 w-5" />
                 </Button>
-                <div className="flex-1">
-                  <p className="font-semibold">{item.word}</p>
-                  <p className="text-sm text-muted-foreground">{item.definition}</p>
+                <div className="flex-1 min-w-0">
+                  <p className="font-bold text-lg text-slate-800 mb-1">{item.word}</p>
+                  <p className="text-sm text-slate-600 leading-snug">{item.definition}</p>
                   {item.translation && (
-                    <p className="text-sm text-blue-600 mt-1">{item.translation}</p>
+                    <p className="text-sm text-blue-600 mt-2 font-medium">{item.translation}</p>
                   )}
                 </div>
               </div>
@@ -331,12 +355,12 @@ function ContentDisplay({ content, audioEnabled, onPlayAudio }: ContentDisplayPr
 
       {/* Visual */}
       {content.visual && (
-        <div className="rounded-lg overflow-hidden border relative h-48">
+        <div className="rounded-2xl overflow-hidden border-4 border-white shadow-lg relative h-64 sm:h-80 bg-slate-100">
           <Image
             src={content.visual}
             alt="Visual support"
             fill
-            className="object-cover"
+            className="object-cover hover:scale-105 transition-transform duration-700"
             sizes="(max-width: 768px) 100vw, 50vw"
           />
         </div>
@@ -373,78 +397,102 @@ function QuestionDisplay({
   onSubmit,
 }: QuestionDisplayProps) {
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {/* Question */}
-      <p className="text-lg font-medium">{question.prompt}</p>
+      <h3 className="text-xl font-semibold text-slate-900 leading-snug">{question.prompt}</h3>
 
       {/* Hint */}
       {showHint && question.hint && (
-        <div className="p-3 rounded-lg bg-amber-50 border border-amber-200 flex items-start gap-2">
-          <Lightbulb className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
-          <p className="text-sm text-amber-800">{question.hint}</p>
+        <div className="p-4 rounded-2xl bg-yellow-50 border-2 border-yellow-100 flex items-start gap-3 animate-in fade-in slide-in-from-top-2">
+          <div className="p-2 bg-yellow-100 rounded-full shrink-0 text-yellow-600">
+            <Lightbulb className="h-5 w-5" />
+          </div>
+          <div className="pt-1">
+            <p className="font-bold text-xs text-yellow-600 uppercase tracking-wide mb-1">Hint</p>
+            <p className="text-base text-yellow-900">{question.hint}</p>
+          </div>
         </div>
       )}
 
       {/* Answer Input based on type */}
       {question.type === "multiple-choice" && question.options ? (
-        <div className="space-y-2">
+        <div className="grid gap-3">
           {question.options.map((option) => (
             <button
               key={option.id}
               onClick={() => onOptionSelect(option.id)}
               className={cn(
-                "w-full p-4 rounded-lg border-2 text-left transition-all",
+                "w-full p-5 rounded-xl border-2 text-left transition-all duration-200 flex items-center gap-4 group",
                 selectedOption === option.id
-                  ? "border-blue-500 bg-blue-50"
-                  : "border-gray-200 hover:border-gray-300"
+                  ? "border-blue-500 bg-blue-50/50 ring-2 ring-blue-200 ring-offset-1"
+                  : "border-slate-100 bg-slate-50 hover:bg-white hover:border-slate-300 hover:shadow-md"
               )}
             >
-              <span className="text-lg">{option.text}</span>
+              <div className={cn(
+                "w-8 h-8 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors",
+                selectedOption === option.id
+                  ? "border-blue-500 bg-blue-500 text-white"
+                  : "border-slate-300 group-hover:border-slate-400"
+              )}>
+                {selectedOption === option.id && <div className="w-2.5 h-2.5 rounded-full bg-white" />}
+              </div>
+              <span className={cn(
+                "text-lg font-medium",
+                selectedOption === option.id ? "text-blue-900" : "text-slate-700"
+              )}>{option.text}</span>
             </button>
           ))}
         </div>
       ) : question.type === "voice" ? (
-        <div className="flex flex-col items-center gap-4">
-          <VoiceRecorder
-            isRecording={isRecording}
-            onStart={onStartRecording}
-            onStop={onStopRecording}
-            onResult={onVoiceResult}
-          />
+        <div className="flex flex-col items-center gap-6 py-4">
+          <div className="p-6 bg-slate-50 rounded-3xl w-full text-center">
+             <VoiceRecorder
+              isRecording={isRecording}
+              onStart={onStartRecording}
+              onStop={onStopRecording}
+              onResult={onVoiceResult}
+            />
+            <p className="text-sm text-slate-500 mt-4 font-medium">
+              {isRecording ? "Listening..." : "Tap microphone to answer"}
+            </p>
+          </div>
+          
           {answer && (
-            <div className="w-full p-3 rounded-lg bg-muted">
-              <p className="text-sm text-muted-foreground mb-1">What you said:</p>
-              <p className="font-medium">{answer}</p>
+            <div className="w-full p-6 rounded-2xl bg-blue-50 border border-blue-100 animate-in fade-in slide-in-from-bottom-2">
+              <p className="text-xs font-bold text-blue-500 uppercase tracking-wide mb-2">Transcript</p>
+              <p className="text-lg font-medium text-slate-900">"{answer}"</p>
             </div>
           )}
         </div>
       ) : question.type === "number" ? (
-        <Input
-          type="number"
-          value={answer}
-          onChange={(e) => onAnswerChange(e.target.value)}
-          placeholder="Type your answer..."
-          className="h-14 text-xl"
-        />
+        <div className="relative">
+          <Input
+            type="number"
+            value={answer}
+            onChange={(e) => onAnswerChange(e.target.value)}
+            placeholder="Type your number..."
+            className="h-16 text-2xl px-6 rounded-2xl border-slate-200 bg-slate-50 focus:bg-white transition-all shadow-sm focus:ring-4 focus:ring-blue-100"
+          />
+        </div>
       ) : (
         <Textarea
           value={answer}
           onChange={(e) => onAnswerChange(e.target.value)}
-          placeholder="Type your answer..."
-          className="min-h-[100px] text-lg"
+          placeholder="Type your answer here..."
+          className="min-h-[140px] text-lg p-5 rounded-2xl border-slate-200 bg-slate-50 focus:bg-white transition-all shadow-sm focus:ring-4 focus:ring-blue-100 resize-none"
         />
       )}
 
       {/* Submit Button */}
-      <div className="flex gap-3">
+      <div className="flex gap-4 pt-4">
         <Button
           onClick={onSubmit}
           disabled={
             question.type === "multiple-choice" ? !selectedOption : !answer.trim()
           }
-          className="flex-1 h-14 text-lg"
+          className="flex-1 h-14 text-lg rounded-2xl bg-slate-900 hover:bg-slate-800 shadow-xl shadow-slate-200 disabled:opacity-50 disabled:shadow-none transition-all hover:-translate-y-1"
         >
-          <Send className="h-5 w-5 mr-2" />
+          <Send className="h-5 w-5 mr-3" />
           Submit Answer
         </Button>
       </div>

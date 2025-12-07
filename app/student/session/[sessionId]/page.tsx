@@ -11,6 +11,7 @@ import { LearningInterface } from "@/components/student/learning-interface"
 import type { StudentProfile } from "@/lib/types/student"
 import type { LinguaFlowWorkflow } from "@/lib/types/workflow"
 import type { NodeExecution } from "@/lib/types/execution"
+import { DEMO_WORKFLOW } from "@/lib/constants/demo-workflow"
 
 interface LearningContent {
   type: "text" | "question" | "multiple-choice" | "voice-prompt" | "visual"
@@ -274,12 +275,21 @@ export default function SessionPage() {
           }
         }
 
-        // If no workflow, check localStorage for session workflow
+        // If no workflow from API, try localStorage
         if (!workflow) {
-          const storedWorkflow = localStorage.getItem(`session-workflow-${sessionId}`)
-          if (storedWorkflow) {
-            workflow = JSON.parse(storedWorkflow)
+          try {
+            const storedWorkflow = localStorage.getItem(`session-workflow-${sessionId}`)
+            if (storedWorkflow) {
+              workflow = JSON.parse(storedWorkflow)
+            }
+          } catch {
+            // localStorage may not be available (SSR or private browsing)
           }
+        }
+
+        // If still no workflow, use demo workflow for demonstration
+        if (!workflow) {
+          workflow = DEMO_WORKFLOW
         }
 
         setSessionState((prev) => ({

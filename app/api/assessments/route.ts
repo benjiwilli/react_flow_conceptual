@@ -6,6 +6,7 @@
 import { NextResponse } from "next/server"
 import { createServerClient, isSupabaseConfigured } from "@/lib/supabase"
 import type { AssessmentResult } from "@/lib/types/assessment"
+import { logger } from "@/lib/logger"
 
 // In-memory store for demo mode when Supabase is not configured
 const mockAssessments: AssessmentResult[] = []
@@ -290,7 +291,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ result, elpaBand }, { status: 201 })
   } catch (error) {
-    console.error("Assessment save error:", error)
+    logger.error("Assessment save error", error)
     return NextResponse.json({ error: "Failed to save assessment" }, { status: 500 })
   }
 }

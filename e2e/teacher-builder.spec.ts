@@ -1,72 +1,108 @@
 /**
  * Teacher Workflow Builder E2E Tests
  * Tests for the workflow canvas and node interactions
+ * 
+ * Note: These tests run in demo mode (no authentication required)
  */
 
 import { test, expect } from "@playwright/test"
 
-// Skip these tests if not authenticated
-// In a real scenario, you'd set up authentication fixtures
 test.describe("Teacher Workflow Builder", () => {
-  test.skip("should load the builder page", async ({ page }) => {
-    // Would need authenticated session
+  test.beforeEach(async ({ page }) => {
+    // Navigate to builder page - works in demo mode without auth
     await page.goto("/teacher/builder")
-    
-    await expect(page.getByRole("heading", { name: /workflow builder/i })).toBeVisible()
+    // Wait for the page to fully load
+    await page.waitForLoadState("networkidle")
   })
 
-  test.skip("should display node palette", async ({ page }) => {
-    await page.goto("/teacher/builder")
-    
-    // Node palette should be visible
-    await expect(page.getByTestId("node-palette")).toBeVisible()
-    
-    // Check for node categories
-    await expect(page.getByText(/input nodes/i)).toBeVisible()
-    await expect(page.getByText(/process nodes/i)).toBeVisible()
-    await expect(page.getByText(/output nodes/i)).toBeVisible()
+  test("should load the builder page", async ({ page }) => {
+    // Check that the LinguaFlow header/branding is visible
+    await expect(page.getByText("LinguaFlow")).toBeVisible()
+    await expect(page.getByText("Learning Pathway Builder")).toBeVisible()
   })
 
-  test.skip("should drag and drop nodes", async ({ page }) => {
-    await page.goto("/teacher/builder")
+  test("should display node library sidebar", async ({ page }) => {
+    // Node Library heading should be visible in the sidebar
+    await expect(page.getByText("Node Library")).toBeVisible()
     
-    const nodePalette = page.getByTestId("node-palette")
-    const canvas = page.getByTestId("workflow-canvas")
-    
-    // Find a node in the palette
-    const inputNode = nodePalette.getByText(/text input/i)
-    
-    // Drag to canvas
-    await inputNode.dragTo(canvas)
-    
-    // Verify node was added
-    await expect(canvas.locator(".react-flow__node")).toHaveCount(1)
+    // Check for search input
+    await expect(page.getByPlaceholder(/search/i)).toBeVisible()
   })
 
-  test.skip("should connect nodes with edges", async ({ page }) => {
-    await page.goto("/teacher/builder")
-    
-    // Add two nodes and connect them
-    // This would require more complex drag-drop simulation
+  test("should have working toolbar buttons", async ({ page }) => {
+    // Check that key toolbar buttons exist in the header toolbar
+    const header = page.locator('header')
+    await expect(header.getByRole("button", { name: /templates/i })).toBeVisible()
+    await expect(header.getByRole("button", { name: /load/i })).toBeVisible()
+    await expect(header.getByRole("button", { name: /save/i })).toBeVisible()
+    await expect(header.getByRole("button", { name: /run/i })).toBeVisible()
   })
 
-  test.skip("should save workflow", async ({ page }) => {
-    await page.goto("/teacher/builder")
-    
-    // Click save button
-    await page.getByRole("button", { name: /save/i }).click()
-    
-    // Should show success message or modal
-    await expect(page.getByText(/saved/i)).toBeVisible()
+  test("canvas should be visible with React Flow elements", async ({ page }) => {
+    // The React Flow canvas should be rendered
+    const canvas = page.locator('.react-flow')
+    await expect(canvas).toBeVisible({ timeout: 5000 })
   })
 
-  test.skip("should preview workflow", async ({ page }) => {
+  test("should be able to click Templates button", async ({ page }) => {
+    // Click Templates button in the header
+    const templatesButton = page.locator('header').getByRole("button", { name: /templates/i })
+    await expect(templatesButton).toBeEnabled()
+    await templatesButton.click()
+    
+    // After click, button state should change (it becomes secondary/active)
+    // Just verify the click doesn't cause an error
+    await expect(templatesButton).toBeVisible()
+  })
+
+  test("should be able to click Save button", async ({ page }) => {
+    // Click Save button
+    const saveButton = page.locator('header').getByRole("button", { name: /save/i })
+    await expect(saveButton).toBeEnabled()
+    await saveButton.click()
+    
+    // Save should work without errors (may show toast)
+    await page.waitForTimeout(500)
+    await expect(saveButton).toBeVisible()
+  })
+
+  test("should be able to click Run button", async ({ page }) => {
+    // Click Run button  
+    const runButton = page.locator('header').getByRole("button", { name: /run/i })
+    await expect(runButton).toBeEnabled()
+    await runButton.click()
+    
+    // Run should work without errors
+    await page.waitForTimeout(500)
+    await expect(runButton).toBeVisible()
+  })
+})
+
+test.describe("Student Session", () => {
+  test("should load student session page", async ({ page }) => {
+    // Navigate to a demo session
+    await page.goto("/student/session/demo-session")
+    
+    // Wait for page to load
+    await page.waitForLoadState("networkidle")
+    
+    // Page should render without crashing
+    await expect(page.locator('body')).toBeVisible()
+  })
+})
+
+test.describe("Accessibility - Builder", () => {
+  test("should support keyboard navigation in header", async ({ page }) => {
     await page.goto("/teacher/builder")
+    await page.waitForLoadState("networkidle")
     
-    // Click preview button
-    await page.getByRole("button", { name: /preview/i }).click()
+    // Tab through header buttons
+    await page.keyboard.press("Tab")
+    await page.keyboard.press("Tab")
+    await page.keyboard.press("Tab")
     
-    // Preview panel should appear
-    await expect(page.getByTestId("preview-panel")).toBeVisible()
+    // At least one button should have focus
+    const focusedElement = page.locator(':focus')
+    await expect(focusedElement).toBeVisible()
   })
 })

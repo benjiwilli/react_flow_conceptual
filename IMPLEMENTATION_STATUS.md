@@ -209,6 +209,48 @@ This document tracks the implementation progress against PROJECT_VISION.md.
 | word-problem-decoder | ✅ | Mock |
 | math-problem-generator | ✅ | Mock |
 | visual-support | ✅ | ✅ AI image generation (optional) |
+| reading-passage | ✅ | ✅ With fallback |
+| comprehensible-input | ✅ | N/A |
+| speaking-assessment | ✅ | N/A (pauses for input) |
+| math-vocabulary | ✅ | Mock |
+| step-by-step-solver | ✅ | N/A |
+| visual-math | ✅ | N/A |
+
+---
+
+## Recent Updates (December 2025)
+
+### Final Audit & Gap Closure Session
+
+The following gaps were identified and addressed during the final codebase audit:
+
+1. **Missing Node Registry Entries** ✅
+   - Added `reading-passage` node - generates leveled reading passages with AI support
+   - Added `comprehensible-input` node - applies Krashen's i+1 theory
+   - Added `speaking-assessment` node - evaluates oral language production
+   - Added `math-vocabulary` node - teaches math vocabulary with L1 support
+   - Added `step-by-step-solver` node - breaks down math problems into steps
+   - Added `visual-math` node - provides visual math representations
+
+2. **Missing Node Runners** ✅
+   - Implemented `runReadingPassageNode` - AI-powered passage generation with mock fallback
+   - Implemented `runComprehensibleInputNode` - scaffolding adjustment for i+1 level
+   - Implemented `runSpeakingAssessmentNode` - speaking task configuration
+   - Implemented `runMathVocabularyNode` - math vocabulary with L1 translations
+   - Implemented `runStepByStepSolverNode` - step-by-step math problem solving
+   - Implemented `runVisualMathNode` - visual representation generation
+
+3. **Alberta Curriculum Data Expansion** ✅
+   - Expanded from 2 sample outcomes to 20+ comprehensive outcomes
+   - Coverage spans Kindergarten through Grade 6
+   - Includes ELA (reading, writing, speaking) and Mathematics outcomes
+   - Each outcome includes ELPA alignment with can-do statements
+   - Cross-curricular speaking and listening outcomes added
+
+4. **Type System Updates** ✅
+   - Added new node types to `LearningNodeType`: `reading-passage`, `math-vocabulary`
+   - Added new node types to `ScaffoldingNodeType`: `step-by-step-solver`, `visual-math`
+   - All nodes properly typed with appropriate data interfaces
 
 ---
 

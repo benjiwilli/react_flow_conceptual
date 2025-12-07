@@ -131,9 +131,8 @@ export async function checkExecutionLimit(
       },
       limitType,
     }
-  } catch (error) {
-    console.error("Rate limit check error:", error)
-    // On error, allow the request but log it
+  } catch {
+    // On error, allow the request (fail open for availability)
     return {
       allowed: true,
       limits: {
@@ -159,8 +158,8 @@ export async function checkIpLimit(ip: string): Promise<RateLimitResult | null> 
       remaining: result.remaining,
       reset: result.reset,
     }
-  } catch (error) {
-    console.error("IP rate limit check error:", error)
+  } catch {
+    // Fail open on error
     return null
   }
 }
@@ -199,8 +198,8 @@ export async function getUsageStats(teacherId: string): Promise<{
       burstLimit: 10,
       periodReset: resetTime,
     }
-  } catch (error) {
-    console.error("Error getting usage stats:", error)
+  } catch {
+    // Return null on error
     return null
   }
 }

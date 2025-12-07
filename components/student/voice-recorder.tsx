@@ -222,56 +222,61 @@ export function VoiceRecorder({
   return (
     <div className="flex flex-col items-center gap-4">
       {/* Recording Button */}
-      <button
-        onClick={isRecording ? stopRecording : startRecording}
-        disabled={isProcessing}
-        className={cn(
-          "relative rounded-full transition-all duration-300",
-          sizeClasses[size],
-          isRecording
-            ? "bg-red-500 hover:bg-red-600 shadow-lg shadow-red-200"
-            : "bg-blue-500 hover:bg-blue-600 shadow-lg shadow-blue-200",
-          isProcessing && "opacity-50 cursor-not-allowed"
-        )}
-      >
-        {/* Audio Level Ring */}
-        {isRecording && showWaveform && (
-          <div
-            className="absolute inset-0 rounded-full border-4 border-white/50 transition-transform"
-            style={{
-              transform: `scale(${1 + audioLevel * 0.3})`,
-            }}
-          />
-        )}
-
-        {/* Icon */}
-        <div className="absolute inset-0 flex items-center justify-center text-white">
-          {isProcessing ? (
-            <Loader2 className={cn(iconSizes[size], "animate-spin")} />
-          ) : isRecording ? (
-            <MicOff className={iconSizes[size]} />
-          ) : (
-            <Mic className={iconSizes[size]} />
-          )}
-        </div>
-
+      <div className="relative group">
         {/* Pulse animation when recording */}
         {isRecording && !isProcessing && (
-          <div className="absolute inset-0 rounded-full bg-red-400 animate-ping opacity-25" />
+          <div className="absolute inset-0 rounded-full bg-red-400 animate-ping opacity-20 scale-150" />
         )}
-      </button>
+        
+        <button
+          onClick={isRecording ? stopRecording : startRecording}
+          disabled={isProcessing}
+          className={cn(
+            "relative rounded-full transition-all duration-300 transform group-hover:scale-105 active:scale-95 flex items-center justify-center",
+            sizeClasses[size],
+            isRecording
+              ? "bg-gradient-to-br from-red-500 to-rose-600 shadow-xl shadow-red-200 ring-4 ring-red-100"
+              : "bg-gradient-to-br from-blue-500 to-indigo-600 shadow-xl shadow-blue-200 hover:shadow-2xl hover:shadow-blue-300",
+            isProcessing && "opacity-80 cursor-not-allowed grayscale"
+          )}
+        >
+          {/* Audio Level Ring */}
+          {isRecording && showWaveform && (
+            <div
+              className="absolute inset-0 rounded-full border-2 border-white/30 transition-transform duration-75 ease-out"
+              style={{
+                transform: `scale(${1 + audioLevel * 0.4})`,
+              }}
+            />
+          )}
+
+          {/* Icon */}
+          <div className="absolute inset-0 flex items-center justify-center text-white drop-shadow-md">
+            {isProcessing ? (
+              <Loader2 className={cn(iconSizes[size], "animate-spin")} />
+            ) : isRecording ? (
+              <MicOff className={iconSizes[size]} />
+            ) : (
+              <Mic className={iconSizes[size]} />
+            )}
+          </div>
+        </button>
+      </div>
 
       {/* Status Text */}
-      <div className="text-center">
+      <div className="text-center space-y-2">
         {isProcessing ? (
-          <p className="text-muted-foreground">Processing...</p>
+          <div className="flex items-center justify-center gap-2 text-slate-500">
+            <Loader2 className="h-4 w-4 animate-spin" />
+            <p className="font-medium">Processing speech...</p>
+          </div>
         ) : isRecording ? (
-          <div className="space-y-1">
-            <p className="text-red-600 font-medium">Recording... Tap to stop</p>
-            <p className="text-sm text-muted-foreground">{formatDuration(duration)}</p>
+          <div className="space-y-1 animate-in fade-in slide-in-from-bottom-1">
+            <p className="text-red-600 font-bold uppercase tracking-wide text-xs bg-red-50 px-3 py-1 rounded-full inline-block">Recording</p>
+            <p className="text-2xl font-mono font-medium text-slate-700 tabular-nums">{formatDuration(duration)}</p>
           </div>
         ) : (
-          <p className="text-muted-foreground">Tap to start speaking</p>
+          <p className="text-slate-400 font-medium">Tap microphone to start</p>
         )}
       </div>
 

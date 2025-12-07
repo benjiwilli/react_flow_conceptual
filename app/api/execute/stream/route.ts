@@ -1,6 +1,10 @@
 /**
  * Streaming Execution API Route
  * Server-Sent Events for real-time execution updates
+ * 
+ * Note: SSE streaming is not yet implemented. Currently, workflow execution
+ * uses polling via the /api/execute endpoint. This route is a placeholder
+ * for future real-time streaming capabilities.
  */
 
 import { NextResponse } from "next/server"
@@ -14,8 +18,13 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Missing executionId" }, { status: 400 })
   }
 
-  // TODO: Implement SSE stream
-  // This will push events as the workflow executes
-
-  return NextResponse.json({ message: "Streaming not yet implemented" })
+  // SSE streaming is planned for a future release.
+  // For now, use the /api/execute endpoint with polling.
+  return NextResponse.json(
+    { 
+      message: "Streaming not yet implemented",
+      hint: "Use /api/execute endpoint with polling for workflow execution"
+    },
+    { status: 501 }
+  )
 }

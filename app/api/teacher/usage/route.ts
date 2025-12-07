@@ -6,6 +6,7 @@
 import { NextResponse, type NextRequest } from "next/server"
 import { getCurrentUser } from "@/lib/auth/api-middleware"
 import { getUsageStats } from "@/lib/middleware/rate-limiter"
+import { logger } from "@/lib/logger"
 
 // Cost per execution estimate (based on average AI API usage)
 const COST_PER_EXECUTION = 0.002 // $0.002 per execution average
@@ -72,7 +73,7 @@ export async function GET(request: NextRequest) {
       trend,
     })
   } catch (error) {
-    console.error("Error fetching usage stats:", error)
+    logger.error("Error fetching usage stats", error)
     return NextResponse.json(
       { error: "Failed to fetch usage statistics" },
       { status: 500 }

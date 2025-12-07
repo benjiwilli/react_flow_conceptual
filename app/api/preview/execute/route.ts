@@ -4,6 +4,7 @@
  */
 
 import { NextRequest, NextResponse } from "next/server"
+import { logger } from "@/lib/logger"
 
 interface ExecuteRequest {
   nodeId: string
@@ -197,9 +198,9 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(response)
   } catch (error) {
-    console.error("Preview execution error:", error)
+    logger.error("Preview execution error", error)
     return NextResponse.json(
-      { error: "Failed to execute node", details: String(error) },
+      { error: "Failed to execute node" },
       { status: 500 }
     )
   }

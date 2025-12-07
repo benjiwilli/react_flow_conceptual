@@ -4,6 +4,8 @@ import { GeistMono } from 'geist/font/mono'
 import { Providers } from '@/components/providers'
 import { SkipLinks } from '@/components/accessibility/skip-links'
 import { Toaster } from '@/components/ui/toaster'
+import { ErrorBoundary } from '@/components/error-boundary'
+import { DemoModeBanner } from '@/components/demo-mode-banner'
 import './globals.css'
 import '@/styles/accessibility-fixes.css'
 import '@/styles/high-contrast.css'
@@ -32,11 +34,14 @@ html {
       </head>
       <body>
         <Providers>
-          <SkipLinks />
-          <main id="main-content">
-            {children}
-          </main>
-          <Toaster />
+          <ErrorBoundary>
+            <SkipLinks />
+            <DemoModeBanner />
+            <main id="main-content">
+              {children}
+            </main>
+            <Toaster />
+          </ErrorBoundary>
         </Providers>
       </body>
     </html>

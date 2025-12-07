@@ -237,18 +237,18 @@ function NodeItem({ node, onDragStart }: NodeItemProps) {
       draggable
       onDragStart={(e) => onDragStart(e, node.type)}
       className={cn(
-        "flex items-start gap-2 p-2 rounded-md cursor-grab transition-all",
-        "border border-transparent",
-        "hover:border-border hover:bg-muted/50 hover:shadow-sm",
+        "flex items-center gap-3 p-3 rounded-lg cursor-grab transition-all duration-200",
+        "border border-transparent bg-background",
+        "hover:border-border hover:shadow-sm hover:translate-x-1",
         "active:cursor-grabbing active:opacity-70"
       )}
     >
-      <div className={cn("flex h-8 w-8 shrink-0 items-center justify-center rounded-md", colors.light)}>
-        <Icon className={cn("h-4 w-4", colors.text)} />
+      <div className={cn("flex h-9 w-9 shrink-0 items-center justify-center rounded-lg shadow-sm", colors.light)}>
+        <Icon className={cn("h-5 w-5", colors.text)} />
       </div>
       <div className="flex-1 min-w-0">
-        <p className="font-medium text-sm truncate">{node.label}</p>
-        <p className="text-xs text-muted-foreground line-clamp-2">{node.description}</p>
+        <p className="font-medium text-sm truncate text-foreground">{node.label}</p>
+        <p className="text-xs text-muted-foreground line-clamp-1">{node.description}</p>
       </div>
     </div>
   )
