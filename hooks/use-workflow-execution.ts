@@ -7,7 +7,7 @@
 
 import { useState, useCallback, useRef } from "react"
 import type { WorkflowExecution, StreamEvent } from "@/lib/types/execution"
-import type { LinguaFlowWorkflow } from "@/lib/types/workflow"
+import type { VerbaPathWorkflow } from "@/lib/types/workflow"
 import { getStreamManager } from "@/lib/engine/stream-manager"
 
 interface UseWorkflowExecutionOptions {
@@ -25,7 +25,7 @@ interface UseWorkflowExecutionReturn {
   currentNodeId: string | null
   streamContent: string
 
-  execute: (workflow: LinguaFlowWorkflow, studentId: string) => Promise<void>
+  execute: (workflow: VerbaPathWorkflow, studentId: string) => Promise<void>
   pause: () => void
   resume: () => Promise<void>
   cancel: () => void
@@ -42,7 +42,7 @@ export function useWorkflowExecution(options: UseWorkflowExecutionOptions = {}):
   const abortControllerRef = useRef<AbortController | null>(null)
 
   const execute = useCallback(
-    async (workflow: LinguaFlowWorkflow, studentId: string) => {
+    async (workflow: VerbaPathWorkflow, studentId: string) => {
       setIsRunning(true)
       setIsPaused(false)
       setStreamContent("")

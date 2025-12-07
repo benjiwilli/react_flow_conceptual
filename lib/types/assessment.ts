@@ -1,5 +1,5 @@
 /**
- * Assessment Types for LinguaFlow
+ * Assessment Types for VerbaPath
  * Tracking student progress and comprehension
  */
 

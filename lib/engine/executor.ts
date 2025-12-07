@@ -1,12 +1,12 @@
 /**
  * Workflow Executor
- * Core execution engine for running LinguaFlow workflows
+ * Core execution engine for running VerbaPath workflows
  * Implements DAG traversal with support for parallel execution, 
  * conditional branching, and streaming responses
  */
 
 import type { WorkflowExecution, ExecutionContext, StreamEvent, NodeExecution } from "@/lib/types/execution"
-import type { LinguaFlowWorkflow, LinguaFlowNode } from "@/lib/types/workflow"
+import type { VerbaPathWorkflow, VerbaPathNode } from "@/lib/types/workflow"
 import type { StudentProfile } from "@/lib/types/student"
 import { getNodeRunner, type NodeRunnerResult } from "./node-runners"
 
@@ -18,7 +18,7 @@ export interface ExecutorConfig {
 }
 
 export interface ExecutorCallbacks {
-  onNodeStart?: (nodeId: string, node: LinguaFlowNode) => void
+  onNodeStart?: (nodeId: string, node: VerbaPathNode) => void
   onNodeComplete?: (nodeId: string, output: Record<string, unknown>) => void
   onNodeError?: (nodeId: string, error: Error) => void
   onStreamToken?: (event: StreamEvent) => void
@@ -28,7 +28,7 @@ export interface ExecutorCallbacks {
 
 interface ExecutionNode {
   id: string
-  node: LinguaFlowNode
+  node: VerbaPathNode
   dependencies: string[]
   dependents: string[]
   status: "pending" | "running" | "completed" | "failed" | "skipped"
@@ -56,7 +56,7 @@ export class WorkflowExecutor {
   /**
    * Execute a workflow for a given student
    */
-  async execute(workflow: LinguaFlowWorkflow, student: StudentProfile): Promise<WorkflowExecution> {
+  async execute(workflow: VerbaPathWorkflow, student: StudentProfile): Promise<WorkflowExecution> {
     // Reset state
     this.executionGraph.clear()
     this.nodeOutputs.clear()
@@ -168,7 +168,7 @@ export class WorkflowExecutor {
       
       if (remainingPending && this.currentExecution.context) {
         await this.executeGraph(
-          { nodes: [], edges: [] } as unknown as LinguaFlowWorkflow, 
+          { nodes: [], edges: [] } as unknown as VerbaPathWorkflow, 
           this.currentExecution.context
         )
         
@@ -241,7 +241,7 @@ export class WorkflowExecutor {
   /**
    * Build the internal execution graph from workflow
    */
-  private buildExecutionGraph(workflow: LinguaFlowWorkflow): void {
+  private buildExecutionGraph(workflow: VerbaPathWorkflow): void {
     // Create execution nodes
     for (const node of workflow.nodes) {
       this.executionGraph.set(node.id, {
@@ -268,7 +268,7 @@ export class WorkflowExecutor {
   /**
    * Execute the workflow graph using topological traversal
    */
-  private async executeGraph(workflow: LinguaFlowWorkflow, context: ExecutionContext): Promise<void> {
+  private async executeGraph(workflow: VerbaPathWorkflow, context: ExecutionContext): Promise<void> {
     const totalNodes = workflow.nodes.length
     let completedNodes = 0
 
@@ -431,7 +431,7 @@ export class WorkflowExecutor {
    * Execute a single node
    */
   private async executeNode(
-    node: LinguaFlowNode,
+    node: VerbaPathNode,
     inputs: Record<string, unknown>,
     context: ExecutionContext
   ): Promise<NodeRunnerResult> {
@@ -496,7 +496,7 @@ export class WorkflowExecutor {
   /**
    * Find the entry node (no incoming edges)
    */
-  private findEntryNode(workflow: LinguaFlowWorkflow): string {
+  private findEntryNode(workflow: VerbaPathWorkflow): string {
     const targetNodeIds = new Set(workflow.edges.map((e) => e.target))
     const entryNode = workflow.nodes.find((n) => !targetNodeIds.has(n.id))
     return entryNode?.id ?? workflow.nodes[0]?.id ?? ""

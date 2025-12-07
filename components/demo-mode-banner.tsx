@@ -61,7 +61,7 @@ export function DemoModeBanner() {
         
         <div className="flex items-center gap-2">
           <Link 
-            href="https://github.com/your-repo/linguaflow#getting-started"
+            href="https://github.com/your-repo/verbapath#getting-started"
             target="_blank"
             rel="noopener noreferrer"
             className="hidden md:flex items-center gap-1 text-xs text-amber-100 hover:text-white transition-colors"

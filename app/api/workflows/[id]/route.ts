@@ -5,7 +5,7 @@
 
 import { NextResponse } from "next/server"
 import { createServerClient, isSupabaseConfigured } from "@/lib/supabase"
-import type { LinguaFlowWorkflow } from "@/lib/types/workflow"
+import type { VerbaPathWorkflow } from "@/lib/types/workflow"
 
 // GET /api/workflows/[id] - Get a single workflow
 export async function GET(
@@ -31,12 +31,12 @@ export async function GET(
         return NextResponse.json({ error: error.message }, { status: 500 })
       }
 
-      const workflow: LinguaFlowWorkflow = {
+      const workflow: VerbaPathWorkflow = {
         id: data.id,
         name: data.name,
         description: data.description || "",
-        nodes: data.nodes as LinguaFlowWorkflow["nodes"],
-        edges: data.edges as LinguaFlowWorkflow["edges"],
+        nodes: data.nodes as VerbaPathWorkflow["nodes"],
+        edges: data.edges as VerbaPathWorkflow["edges"],
         targetGrades: data.target_grades || [],
         targetELPALevels: data.target_elpa_levels || [],
         curriculumOutcomes: [],
@@ -91,12 +91,12 @@ export async function PUT(
           return NextResponse.json({ error: error.message }, { status: 500 })
         }
 
-        const workflow: LinguaFlowWorkflow = {
+        const workflow: VerbaPathWorkflow = {
           id: data.id,
           name: data.name,
           description: data.description || "",
-          nodes: data.nodes as LinguaFlowWorkflow["nodes"],
-          edges: data.edges as LinguaFlowWorkflow["edges"],
+          nodes: data.nodes as VerbaPathWorkflow["nodes"],
+          edges: data.edges as VerbaPathWorkflow["edges"],
           targetGrades: data.target_grades || [],
           targetELPALevels: data.target_elpa_levels || [],
           curriculumOutcomes: [],

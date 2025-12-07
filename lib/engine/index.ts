@@ -1,5 +1,5 @@
 /**
- * LinguaFlow Engine Exports
+ * VerbaPath Engine Exports
  * Core execution engine for workflow processing
  */
 

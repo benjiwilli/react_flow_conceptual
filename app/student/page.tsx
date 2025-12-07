@@ -8,7 +8,7 @@ import { StudentInterface } from "@/components/student/student-interface"
 import { StudentProvider } from "@/contexts/student-context"
 
 export const metadata = {
-  title: "Learn | LinguaFlow",
+  title: "Learn | VerbaPath",
   description: "Your personalized learning journey",
 }
 

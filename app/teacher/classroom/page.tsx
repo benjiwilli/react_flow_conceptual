@@ -8,7 +8,7 @@ import { ClassroomView } from "@/components/teacher/classroom-view"
 import { ClassroomProvider } from "@/contexts/classroom-context"
 
 export const metadata = {
-  title: "Classroom | LinguaFlow",
+  title: "Classroom | VerbaPath",
   description: "Monitor student progress in real-time",
 }
 

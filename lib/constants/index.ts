@@ -1,5 +1,5 @@
 /**
- * LinguaFlow Constants Exports
+ * VerbaPath Constants Exports
  */
 
 export * from "./elpa-levels"

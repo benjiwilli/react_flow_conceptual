@@ -1,5 +1,5 @@
 /**
- * Student Profile Types for LinguaFlow ESL Learning Orchestrator
+ * Student Profile Types for VerbaPath ESL Learning Orchestrator
  * Alberta K-12 ESL Student Data Models
  */
 

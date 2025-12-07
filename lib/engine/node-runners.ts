@@ -4,7 +4,7 @@
  * These runners process inputs and produce outputs for workflow execution
  */
 
-import type { LinguaFlowNode } from "@/lib/types/workflow"
+import type { VerbaPathNode } from "@/lib/types/workflow"
 import type { ExecutionContext } from "@/lib/types/execution"
 import type { AIModelNodeData, PromptTemplateNodeData, StructuredOutputNodeData } from "@/lib/types/nodes"
 import { generateStructuredOutput, generateTextCompletion, streamTextCompletion, generateImage } from "./ai-client"
@@ -18,7 +18,7 @@ export interface NodeRunnerResult {
 }
 
 export type NodeRunner = (
-  node: LinguaFlowNode,
+  node: VerbaPathNode,
   input: Record<string, unknown>,
   context: ExecutionContext,
 ) => Promise<NodeRunnerResult>

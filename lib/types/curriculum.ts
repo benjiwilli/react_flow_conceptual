@@ -1,5 +1,5 @@
 /**
- * Alberta Curriculum Types for LinguaFlow
+ * Alberta Curriculum Types for VerbaPath
  * Aligned with Alberta Programs of Study
  */
 
