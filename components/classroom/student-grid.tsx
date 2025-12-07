@@ -4,6 +4,13 @@
  * Student Grid Component
  * Real-time display of student progress in classroom view
  *
+ * Design Philosophy (Jony Ive Inspired):
+ * - Cards breathe with generous internal spacing
+ * - Subtle shadows create depth without distraction
+ * - Status indicators use refined, muted colors
+ * - Animations inform transitions, never overwhelm
+ * - Every pixel serves a purpose
+ *
  * Layout:
  * ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐
  * │ Ahmed   │ │ Wei     │ │ Sofia   │ │ Priya   │ │ Dmitri  │
@@ -129,10 +136,10 @@ export function StudentGrid({
   const needsAttentionCount = students.filter((s) => s.needsAttention).length
 
   return (
-    <div className="space-y-4">
-      {/* Filters */}
+    <div className="space-y-6">
+      {/* Filters - Refined pill navigation */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 p-1.5 bg-muted/40 backdrop-blur-sm rounded-2xl">
           <FilterButton
             label="All"
             count={students.length}
@@ -162,37 +169,47 @@ export function StudentGrid({
         </div>
 
         {needsAttentionCount > 0 && (
-          <Badge variant="destructive" className="animate-pulse">
-            <AlertCircle className="h-3 w-3 mr-1" />
+          <Badge 
+            variant="destructive" 
+            className="px-3 py-1.5 rounded-full font-medium shadow-sm animate-pulse"
+          >
+            <AlertCircle className="h-3.5 w-3.5 mr-1.5" />
             {needsAttentionCount} need attention
           </Badge>
         )}
       </div>
 
-      {/* Student Cards */}
+      {/* Student Cards - Staggered animation on load */}
       <div
         className={cn(
           viewMode === "grid"
-            ? "grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
-            : "space-y-2"
+            ? "grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
+            : "space-y-3"
         )}
       >
-        {displayStudents.map((studentProgress) => (
-          <StudentCard
+        {displayStudents.map((studentProgress, index) => (
+          <div
             key={studentProgress.studentId}
-            progress={studentProgress}
-            isSelected={selectedStudentId === studentProgress.studentId}
-            onClick={() => onSelectStudent(studentProgress.studentId)}
-            onSendMessage={() => onSendMessage(studentProgress.studentId)}
-            onProvideHint={() => onProvideHint(studentProgress.studentId)}
-            viewMode={viewMode}
-          />
+            className="animate-in fade-in-50 slide-in-from-bottom-2"
+            style={{ animationDelay: `${index * 50}ms`, animationFillMode: "backwards" }}
+          >
+            <StudentCard
+              progress={studentProgress}
+              isSelected={selectedStudentId === studentProgress.studentId}
+              onClick={() => onSelectStudent(studentProgress.studentId)}
+              onSendMessage={() => onSendMessage(studentProgress.studentId)}
+              onProvideHint={() => onProvideHint(studentProgress.studentId)}
+              viewMode={viewMode}
+            />
+          </div>
         ))}
       </div>
 
       {displayStudents.length === 0 && (
-        <div className="text-center py-12 text-muted-foreground">
-          No students match the current filter
+        <div className="text-center py-16 text-muted-foreground">
+          <div className="mb-3 text-4xl opacity-50">🔍</div>
+          <p className="font-medium">No students match the current filter</p>
+          <p className="text-sm mt-1 opacity-70">Try selecting a different filter above</p>
         </div>
       )}
     </div>
@@ -230,23 +247,26 @@ function StudentCard({
       <div
         onClick={onClick}
         className={cn(
-          "flex items-center gap-4 p-4 rounded-lg border cursor-pointer transition-all",
-          isSelected ? "border-primary bg-primary/5" : "border-border hover:border-primary/50",
-          needsAttention && "border-amber-500 bg-amber-50"
+          "flex items-center gap-5 p-4 rounded-xl border cursor-pointer transition-all duration-200",
+          "hover:shadow-md hover:-translate-y-0.5",
+          isSelected 
+            ? "border-primary/50 bg-primary/5 shadow-sm ring-1 ring-primary/20" 
+            : "border-border/60 bg-card hover:border-primary/30",
+          needsAttention && "border-amber-400/50 bg-amber-50/80 ring-1 ring-amber-400/20"
         )}
       >
-        <div className="flex items-center gap-3 flex-1">
+        <div className="flex items-center gap-4 flex-1">
           <StudentAvatar name={student.firstName} elpaLevel={student.elpaLevel} />
-          <div className="flex-1">
-            <p className="font-medium">{student.firstName} {student.lastName?.charAt(0)}.</p>
-            <p className="text-xs text-muted-foreground">ELPA {student.elpaLevel} • Grade {student.gradeLevel}</p>
+          <div className="flex-1 min-w-0">
+            <p className="font-medium truncate tracking-tight">{student.firstName} {student.lastName?.charAt(0)}.</p>
+            <p className="text-xs text-muted-foreground mt-0.5">ELPA {student.elpaLevel} • Grade {student.gradeLevel}</p>
           </div>
         </div>
 
-        <div className="flex items-center gap-4">
-          <div className="w-32">
-            <Progress value={progressPercent} className="h-2" />
-            <p className="text-xs text-muted-foreground mt-1">{currentStep}/{totalSteps}</p>
+        <div className="flex items-center gap-5">
+          <div className="w-36">
+            <Progress value={progressPercent} className="h-2 rounded-full" />
+            <p className="text-xs text-muted-foreground mt-1.5 font-light">{currentStep}/{totalSteps} steps</p>
           </div>
           <StatusBadge status={status} />
           {streakCount > 2 && <StreakBadge count={streakCount} />}
@@ -260,75 +280,91 @@ function StudentCard({
       <div
         onClick={onClick}
         className={cn(
-          "relative p-4 rounded-lg border cursor-pointer transition-all",
-          isSelected ? "border-primary ring-2 ring-primary/20" : "border-border hover:border-primary/50",
-          needsAttention && "border-amber-500 bg-amber-50 animate-pulse"
+          "relative p-5 rounded-2xl border cursor-pointer transition-all duration-200",
+          "hover:shadow-lg hover:-translate-y-1",
+          "bg-card",
+          isSelected 
+            ? "border-primary/50 ring-2 ring-primary/20 shadow-md" 
+            : "border-border/50 hover:border-primary/30 shadow-sm",
+          needsAttention && "border-amber-400/50 bg-gradient-to-br from-amber-50 to-orange-50/50"
         )}
       >
-        {/* Attention Indicator */}
+        {/* Attention Indicator - Refined floating badge */}
         {needsAttention && (
           <Tooltip>
             <TooltipTrigger asChild>
-              <div className="absolute -top-2 -right-2 h-5 w-5 rounded-full bg-amber-500 flex items-center justify-center">
-                <AlertCircle className="h-3 w-3 text-white" />
+              <div className="absolute -top-2.5 -right-2.5 h-6 w-6 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-md ring-2 ring-background">
+                <AlertCircle className="h-3.5 w-3.5 text-white" />
               </div>
             </TooltipTrigger>
-            <TooltipContent>
-              <p>{attentionReason || "Student may need help"}</p>
+            <TooltipContent className="max-w-[200px]">
+              <p className="text-sm">{attentionReason || "Student may need help"}</p>
             </TooltipContent>
           </Tooltip>
         )}
 
-        {/* Header */}
-        <div className="flex items-center justify-between mb-3">
+        {/* Header - Refined spacing and actions */}
+        <div className="flex items-center justify-between mb-4">
           <StudentAvatar name={student.firstName} elpaLevel={student.elpaLevel} size="sm" />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-8 w-8">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="h-8 w-8 rounded-lg opacity-0 group-hover:opacity-100 hover:opacity-100 focus:opacity-100 transition-opacity"
+              >
                 <MoreHorizontal className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onSendMessage(); }}>
-                <MessageSquare className="h-4 w-4 mr-2" />
+            <DropdownMenuContent align="end" className="rounded-xl">
+              <DropdownMenuItem 
+                onClick={(e) => { e.stopPropagation(); onSendMessage(); }}
+                className="rounded-lg"
+              >
+                <MessageSquare className="h-4 w-4 mr-2.5" />
                 Send Message
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onProvideHint(); }}>
-                <HelpCircle className="h-4 w-4 mr-2" />
+              <DropdownMenuItem 
+                onClick={(e) => { e.stopPropagation(); onProvideHint(); }}
+                className="rounded-lg"
+              >
+                <HelpCircle className="h-4 w-4 mr-2.5" />
                 Provide Hint
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
 
-        {/* Name and Status */}
-        <div className="mb-3">
-          <p className="font-medium truncate">{student.firstName}</p>
-          <p className="text-xs text-muted-foreground">Grade {student.gradeLevel}</p>
+        {/* Name and Status - Typography focused */}
+        <div className="mb-4">
+          <p className="font-semibold truncate tracking-tight text-foreground">{student.firstName}</p>
+          <p className="text-xs text-muted-foreground mt-0.5 font-light">Grade {student.gradeLevel}</p>
         </div>
 
-        {/* Progress */}
-        <div className="mb-3">
-          <div className="flex items-center justify-between text-xs mb-1">
-            <span className="text-muted-foreground">Q{currentStep}/{totalSteps}</span>
-            <span className={cn("font-medium", statusConfig.color)}>{Math.round(progressPercent)}%</span>
+        {/* Progress - Clean visualization */}
+        <div className="mb-4">
+          <div className="flex items-center justify-between text-xs mb-2">
+            <span className="text-muted-foreground font-light">Q{currentStep}/{totalSteps}</span>
+            <span className={cn("font-semibold tabular-nums", statusConfig.color)}>{Math.round(progressPercent)}%</span>
           </div>
-          <Progress value={progressPercent} className={cn("h-2", statusConfig.progressColor)} />
+          <Progress value={progressPercent} className={cn("h-2 rounded-full", statusConfig.progressColor)} />
         </div>
 
-        {/* Footer */}
-        <div className="flex items-center justify-between">
+        {/* Footer - Status and achievements */}
+        <div className="flex items-center justify-between pt-1">
           <StatusBadge status={status} size="sm" />
           {streakCount > 2 && <StreakBadge count={streakCount} size="sm" />}
         </div>
 
-        {/* Completed Badge */}
+        {/* Completed Overlay - Celebratory but refined */}
         {status === "completed" && (
-          <div className="absolute inset-0 flex items-center justify-center bg-background/80 rounded-lg">
+          <div className="absolute inset-0 flex items-center justify-center bg-background/90 backdrop-blur-sm rounded-2xl">
             <div className="text-center">
-              <Trophy className="h-8 w-8 text-amber-500 mx-auto mb-1" />
-              <p className="font-medium text-amber-700">Done!</p>
-              <p className="text-xs text-muted-foreground">{score}%</p>
+              <div className="mb-2 inline-flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-amber-100 to-yellow-100 shadow-inner">
+                <Trophy className="h-7 w-7 text-amber-600" />
+              </div>
+              <p className="font-semibold text-amber-800 tracking-tight">Completed!</p>
+              <p className="text-sm text-muted-foreground mt-0.5 font-light">{score}% score</p>
             </div>
           </div>
         )}
@@ -348,20 +384,21 @@ interface StudentAvatarProps {
 }
 
 function StudentAvatar({ name, elpaLevel, size = "md" }: StudentAvatarProps) {
+  // Refined ELPA color palette - softer, more sophisticated
   const elpaColors: Record<ELPALevel, string> = {
-    1: "bg-red-100 text-red-700 ring-red-500",
-    2: "bg-orange-100 text-orange-700 ring-orange-500",
-    3: "bg-yellow-100 text-yellow-700 ring-yellow-500",
-    4: "bg-green-100 text-green-700 ring-green-500",
-    5: "bg-blue-100 text-blue-700 ring-blue-500",
+    1: "bg-gradient-to-br from-rose-100 to-red-100 text-rose-700 ring-rose-300/50",
+    2: "bg-gradient-to-br from-orange-100 to-amber-100 text-orange-700 ring-orange-300/50",
+    3: "bg-gradient-to-br from-yellow-100 to-amber-50 text-amber-700 ring-yellow-300/50",
+    4: "bg-gradient-to-br from-emerald-100 to-green-100 text-emerald-700 ring-emerald-300/50",
+    5: "bg-gradient-to-br from-blue-100 to-indigo-100 text-blue-700 ring-blue-300/50",
   }
 
   return (
     <div
       className={cn(
-        "rounded-full flex items-center justify-center font-medium ring-2",
+        "rounded-xl flex items-center justify-center font-semibold ring-2 shadow-sm transition-transform duration-200 hover:scale-105",
         elpaColors[elpaLevel],
-        size === "sm" ? "h-8 w-8 text-xs" : "h-10 w-10 text-sm"
+        size === "sm" ? "h-9 w-9 text-xs" : "h-11 w-11 text-sm"
       )}
     >
       {name.charAt(0).toUpperCase()}
@@ -381,13 +418,13 @@ function StatusBadge({ status, size = "md" }: StatusBadgeProps) {
   return (
     <div
       className={cn(
-        "flex items-center gap-1 rounded-full",
-        size === "sm" ? "px-2 py-0.5 text-[10px]" : "px-2.5 py-1 text-xs",
+        "flex items-center gap-1.5 rounded-full font-medium transition-colors",
+        size === "sm" ? "px-2.5 py-1 text-[10px]" : "px-3 py-1.5 text-xs",
         config.bg
       )}
     >
-      <Icon className={cn(size === "sm" ? "h-2.5 w-2.5" : "h-3 w-3", config.color)} />
-      <span className={config.color}>{config.label}</span>
+      <Icon className={cn(size === "sm" ? "h-3 w-3" : "h-3.5 w-3.5", config.color)} />
+      <span className={cn(config.color, "tracking-tight")}>{config.label}</span>
     </div>
   )
 }
@@ -401,12 +438,13 @@ function StreakBadge({ count, size = "md" }: StreakBadgeProps) {
   return (
     <div
       className={cn(
-        "flex items-center gap-0.5 text-orange-500",
+        "flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-orange-100 to-amber-100",
+        "text-orange-600 font-semibold tabular-nums",
         size === "sm" ? "text-[10px]" : "text-xs"
       )}
     >
-      <Zap className={cn("fill-current", size === "sm" ? "h-3 w-3" : "h-4 w-4")} />
-      <span className="font-medium">{count}</span>
+      <Zap className={cn("fill-current", size === "sm" ? "h-3 w-3" : "h-3.5 w-3.5")} />
+      <span>{count}</span>
     </div>
   )
 }
@@ -424,17 +462,22 @@ function FilterButton({ label, count, isActive, onClick, variant = "default" }: 
     <button
       onClick={onClick}
       className={cn(
-        "px-3 py-1.5 rounded-full text-sm font-medium transition-colors",
+        "px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200",
+        "hover:scale-[1.02] active:scale-[0.98]",
         isActive
           ? variant === "warning"
-            ? "bg-amber-500 text-white"
+            ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-md"
             : variant === "success"
-            ? "bg-green-500 text-white"
-            : "bg-primary text-primary-foreground"
-          : "bg-muted text-muted-foreground hover:bg-muted/80"
+            ? "bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-md"
+            : "bg-primary text-primary-foreground shadow-md"
+          : "bg-background/80 text-muted-foreground hover:bg-background hover:text-foreground hover:shadow-sm"
       )}
     >
-      {label} ({count})
+      <span className="tracking-tight">{label}</span>
+      <span className={cn(
+        "ml-1.5 tabular-nums",
+        isActive ? "opacity-90" : "opacity-70"
+      )}>({count})</span>
     </button>
   )
 }
@@ -444,6 +487,7 @@ function FilterButton({ label, count, isActive, onClick, variant = "default" }: 
 // ============================================================================
 
 function getStatusConfig(status: StudentStatus) {
+  // Refined color palette - softer, more sophisticated
   const configs: Record<StudentStatus, {
     label: string
     color: string
@@ -453,44 +497,44 @@ function getStatusConfig(status: StudentStatus) {
   }> = {
     idle: {
       label: "Idle",
-      color: "text-gray-500",
-      bg: "bg-gray-100",
+      color: "text-slate-500",
+      bg: "bg-slate-100/80",
       progressColor: "",
       icon: Clock,
     },
     working: {
       label: "Working",
       color: "text-blue-600",
-      bg: "bg-blue-100",
-      progressColor: "bg-blue-500",
+      bg: "bg-blue-50 ring-1 ring-blue-200/50",
+      progressColor: "[&>div]:bg-gradient-to-r [&>div]:from-blue-500 [&>div]:to-indigo-500",
       icon: Zap,
     },
     completed: {
       label: "Done",
-      color: "text-green-600",
-      bg: "bg-green-100",
-      progressColor: "bg-green-500",
+      color: "text-emerald-600",
+      bg: "bg-emerald-50 ring-1 ring-emerald-200/50",
+      progressColor: "[&>div]:bg-gradient-to-r [&>div]:from-emerald-500 [&>div]:to-green-500",
       icon: Trophy,
     },
     struggling: {
       label: "Struggling",
       color: "text-orange-600",
-      bg: "bg-orange-100",
-      progressColor: "bg-orange-500",
+      bg: "bg-orange-50 ring-1 ring-orange-200/50",
+      progressColor: "[&>div]:bg-gradient-to-r [&>div]:from-orange-500 [&>div]:to-amber-500",
       icon: AlertCircle,
     },
     "needs-help": {
       label: "Help!",
-      color: "text-red-600",
-      bg: "bg-red-100",
-      progressColor: "bg-red-500",
+      color: "text-rose-600",
+      bg: "bg-rose-50 ring-1 ring-rose-200/50",
+      progressColor: "[&>div]:bg-gradient-to-r [&>div]:from-rose-500 [&>div]:to-red-500",
       icon: HelpCircle,
     },
     reviewing: {
       label: "Reviewing",
-      color: "text-purple-600",
-      bg: "bg-purple-100",
-      progressColor: "bg-purple-500",
+      color: "text-violet-600",
+      bg: "bg-violet-50 ring-1 ring-violet-200/50",
+      progressColor: "[&>div]:bg-gradient-to-r [&>div]:from-violet-500 [&>div]:to-purple-500",
       icon: User,
     },
   }

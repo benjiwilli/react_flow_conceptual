@@ -20,7 +20,7 @@ import {
   Send,
   Lightbulb,
   ChevronRight,
-  Loader2,
+  Sparkles,
 } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
@@ -29,6 +29,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import { Skeleton, SkeletonText } from "@/components/ui/skeleton"
 import { VoiceRecorder } from "./voice-recorder"
 import { CelebrationOverlay } from "./visual-feedback"
 
@@ -266,9 +267,34 @@ export function LearningInterface({
 
 function LoadingState() {
   return (
-    <div className="flex flex-col items-center justify-center py-12">
-      <Loader2 className="h-12 w-12 text-blue-500 animate-spin mb-4" />
-      <p className="text-muted-foreground">Getting ready...</p>
+    <div className="space-y-6 py-4 animate-fade-in">
+      {/* Shimmer header */}
+      <div className="flex items-center gap-3">
+        <Skeleton className="h-10 w-10 rounded-full" />
+        <Skeleton className="h-5 w-32" />
+      </div>
+      
+      {/* Content shimmer */}
+      <SkeletonText lines={3} />
+      
+      {/* Visual placeholder */}
+      <Skeleton className="h-40 w-full rounded-2xl" />
+      
+      {/* Vocabulary shimmer */}
+      <div className="grid grid-cols-2 gap-3">
+        <Skeleton className="h-20 rounded-xl" />
+        <Skeleton className="h-20 rounded-xl" />
+      </div>
+      
+      {/* Loading indicator */}
+      <div className="flex items-center justify-center gap-2 pt-4">
+        <div className="flex gap-1">
+          <div className="h-2 w-2 rounded-full bg-blue-400 animate-bounce" style={{ animationDelay: "0ms" }} />
+          <div className="h-2 w-2 rounded-full bg-blue-400 animate-bounce" style={{ animationDelay: "150ms" }} />
+          <div className="h-2 w-2 rounded-full bg-blue-400 animate-bounce" style={{ animationDelay: "300ms" }} />
+        </div>
+        <span className="text-sm text-muted-foreground ml-2">Loading your activity...</span>
+      </div>
     </div>
   )
 }
@@ -287,12 +313,19 @@ function StreamingContent({ text }: { text: string }) {
 
 function EmptyState() {
   return (
-    <div className="flex flex-col items-center justify-center py-12 text-center">
-      <div className="h-16 w-16 rounded-full bg-blue-100 flex items-center justify-center mb-4">
-        <Lightbulb className="h-8 w-8 text-blue-500" />
+    <div className="flex flex-col items-center justify-center py-16 text-center animate-fade-up">
+      <div className="relative mb-6">
+        <div className="h-20 w-20 rounded-full bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center shadow-subtle">
+          <Sparkles className="h-9 w-9 text-blue-500" />
+        </div>
+        <div className="absolute -top-1 -right-1 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center border-2 border-white shadow-sm">
+          <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+        </div>
       </div>
-      <h3 className="text-lg font-medium mb-2">Ready to learn!</h3>
-      <p className="text-muted-foreground">Content will appear here</p>
+      <h3 className="text-xl font-semibold text-slate-800 mb-2">Ready to learn!</h3>
+      <p className="text-muted-foreground max-w-xs">
+        Your learning activity is being prepared. Get ready for something amazing!
+      </p>
     </div>
   )
 }

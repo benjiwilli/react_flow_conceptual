@@ -3,6 +3,13 @@
 /**
  * Teacher Alerts Component
  * Real-time notifications for student progress and concerns
+ * 
+ * Design Philosophy (Jony Ive Inspired):
+ * - Alerts surface gently but with clear urgency hierarchy
+ * - Visual weight proportional to importance
+ * - Transitions that feel natural and informed
+ * - Clutter-free, scannable at a glance
+ * - Actions obvious without being intrusive
  */
 
 import * as React from "react"
@@ -64,31 +71,37 @@ interface TeacherAlertsProps {
 // Alert Configuration
 // ============================================================================
 
-const alertConfig: Record<AlertType, { icon: React.ElementType; color: string; bgColor: string }> = {
+// Refined alert configuration with subtle gradients and softer colors
+const alertConfig: Record<AlertType, { icon: React.ElementType; color: string; bgColor: string; iconBg: string }> = {
   struggling: {
     icon: TrendingDown,
-    color: "text-red-600",
-    bgColor: "bg-red-50 border-red-200",
+    color: "text-rose-600",
+    bgColor: "bg-gradient-to-br from-rose-50 to-red-50/50 border-rose-200/50 ring-1 ring-rose-200/30",
+    iconBg: "bg-rose-100",
   },
   completed: {
     icon: CheckCircle2,
-    color: "text-green-600",
-    bgColor: "bg-green-50 border-green-200",
+    color: "text-emerald-600",
+    bgColor: "bg-gradient-to-br from-emerald-50 to-green-50/50 border-emerald-200/50 ring-1 ring-emerald-200/30",
+    iconBg: "bg-emerald-100",
   },
   idle: {
     icon: Clock,
     color: "text-amber-600",
-    bgColor: "bg-amber-50 border-amber-200",
+    bgColor: "bg-gradient-to-br from-amber-50 to-yellow-50/50 border-amber-200/50 ring-1 ring-amber-200/30",
+    iconBg: "bg-amber-100",
   },
   "help-requested": {
     icon: HelpCircle,
     color: "text-blue-600",
-    bgColor: "bg-blue-50 border-blue-200",
+    bgColor: "bg-gradient-to-br from-blue-50 to-indigo-50/50 border-blue-200/50 ring-1 ring-blue-200/30",
+    iconBg: "bg-blue-100",
   },
   achievement: {
     icon: Sparkles,
-    color: "text-purple-600",
-    bgColor: "bg-purple-50 border-purple-200",
+    color: "text-violet-600",
+    bgColor: "bg-gradient-to-br from-violet-50 to-purple-50/50 border-violet-200/50 ring-1 ring-violet-200/30",
+    iconBg: "bg-violet-100",
   },
 }
 
@@ -135,39 +148,54 @@ function AlertItem({
   return (
     <div
       className={cn(
-        "p-3 rounded-lg border transition-all",
+        "p-4 rounded-2xl border transition-all duration-200 hover:shadow-md",
         config.bgColor,
-        !alert.isRead && "ring-2 ring-offset-1 ring-blue-400"
+        !alert.isRead && "ring-2 ring-offset-2 ring-blue-400/50 shadow-sm"
       )}
     >
-      <div className="flex items-start gap-3">
-        <div className={cn("p-1.5 rounded-full bg-white", config.color)}>
+      <div className="flex items-start gap-4">
+        <div className={cn("p-2 rounded-xl shadow-inner", config.iconBg, config.color)}>
           <Icon className="h-4 w-4" />
         </div>
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-1">
-            <span className="font-medium text-sm">{alert.studentName}</span>
-            <Badge variant={badge.variant} className="text-xs h-5">
+          <div className="flex items-center gap-2.5 mb-1.5">
+            <span className="font-semibold text-sm tracking-tight">{alert.studentName}</span>
+            <Badge variant={badge.variant} className="text-[10px] h-5 px-2 shadow-sm">
               {badge.label}
             </Badge>
-            <span className="text-xs text-muted-foreground ml-auto">{timeAgo}</span>
+            <span className="text-xs text-muted-foreground ml-auto font-light tabular-nums">{timeAgo}</span>
           </div>
-          <p className="text-sm text-gray-700">{alert.message}</p>
+          <p className="text-sm text-gray-700 font-light leading-relaxed">{alert.message}</p>
           {alert.details && (
-            <p className="text-xs text-muted-foreground mt-1">{alert.details}</p>
+            <p className="text-xs text-muted-foreground mt-1.5 font-light">{alert.details}</p>
           )}
-          <div className="flex items-center gap-2 mt-2">
-            <Button size="sm" variant="outline" className="h-7 text-xs" onClick={onTakeAction}>
-              <User className="h-3 w-3 mr-1" />
+          <div className="flex items-center gap-2 mt-3 pt-2 border-t border-border/30">
+            <Button 
+              size="sm" 
+              variant="outline" 
+              className="h-8 text-xs rounded-lg font-medium transition-all duration-200 hover:bg-primary hover:text-primary-foreground" 
+              onClick={onTakeAction}
+            >
+              <User className="h-3.5 w-3.5 mr-1.5" />
               View Student
             </Button>
             {!alert.isRead && (
-              <Button size="sm" variant="ghost" className="h-7 text-xs" onClick={onMarkRead}>
+              <Button 
+                size="sm" 
+                variant="ghost" 
+                className="h-8 text-xs rounded-lg font-medium" 
+                onClick={onMarkRead}
+              >
                 Mark Read
               </Button>
             )}
-            <Button size="sm" variant="ghost" className="h-7 text-xs ml-auto" onClick={onDismiss}>
-              <X className="h-3 w-3" />
+            <Button 
+              size="sm" 
+              variant="ghost" 
+              className="h-8 w-8 p-0 ml-auto rounded-lg opacity-60 hover:opacity-100 transition-opacity" 
+              onClick={onDismiss}
+            >
+              <X className="h-3.5 w-3.5" />
             </Button>
           </div>
         </div>
@@ -225,50 +253,53 @@ export function TeacherAlerts({
   }
 
   return (
-    <Card className={cn("flex flex-col", className)}>
-      <CardHeader className="pb-3 flex-row items-center justify-between space-y-0">
-        <div className="flex items-center gap-2">
-          <CardTitle className="text-lg">Alerts</CardTitle>
-          {unreadCount > 0 && (
-            <Badge variant="destructive" className="h-5">
-              {unreadCount}
-            </Badge>
-          )}
+    <Card className={cn("flex flex-col overflow-hidden shadow-lg", className)}>
+      <CardHeader className="pb-4 flex-row items-center justify-between space-y-0 border-b border-border/50">
+        <div className="flex items-center gap-3">
+          <div className="p-2 rounded-xl bg-muted/50">
+            <Bell className="h-5 w-5 text-primary" />
+          </div>
+          <div>
+            <CardTitle className="text-lg font-semibold tracking-tight">Alerts</CardTitle>
+            {unreadCount > 0 && (
+              <p className="text-xs text-muted-foreground font-light">{unreadCount} unread</p>
+            )}
+          </div>
         </div>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+              <Button variant="ghost" size="sm" className="h-9 w-9 p-0 rounded-xl">
                 {mutedTypes.size > 0 ? (
-                  <BellOff className="h-4 w-4" />
+                  <BellOff className="h-4 w-4 text-muted-foreground" />
                 ) : (
                   <Bell className="h-4 w-4" />
                 )}
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Alert Types</DropdownMenuLabel>
+            <DropdownMenuContent align="end" className="rounded-xl">
+              <DropdownMenuLabel className="font-semibold">Alert Types</DropdownMenuLabel>
               <DropdownMenuSeparator />
               {(Object.keys(alertConfig) as AlertType[]).map((type) => (
                 <DropdownMenuItem
                   key={type}
                   onClick={() => toggleMute(type)}
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-2.5 rounded-lg"
                 >
                   {mutedTypes.has(type) ? (
-                    <BellOff className="h-3 w-3" />
+                    <BellOff className="h-3.5 w-3.5 text-muted-foreground" />
                   ) : (
-                    <Bell className="h-3 w-3" />
+                    <Bell className="h-3.5 w-3.5" />
                   )}
-                  <span className="capitalize">{type.replace("-", " ")}</span>
+                  <span className="capitalize font-medium">{type.replace("-", " ")}</span>
                 </DropdownMenuItem>
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
           <Button
-            variant="ghost"
+            variant="outline"
             size="sm"
-            className="h-8 text-xs"
+            className="h-9 text-xs rounded-xl font-medium"
             onClick={() => setShowAll(!showAll)}
           >
             {showAll ? "Show Unread" : "Show All"}
@@ -276,36 +307,51 @@ export function TeacherAlerts({
         </div>
       </CardHeader>
       <CardContent className="flex-1 p-0">
-        <ScrollArea className="h-[400px] px-4 pb-4">
+        <ScrollArea className="h-[450px] px-4 py-4">
           {visibleAlerts.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-32 text-muted-foreground">
-              <CheckCircle2 className="h-8 w-8 mb-2 opacity-50" />
-              <p className="text-sm">No alerts to show</p>
+            <div className="flex flex-col items-center justify-center h-40 text-muted-foreground">
+              <div className="p-4 rounded-2xl bg-muted/30 mb-4">
+                <CheckCircle2 className="h-10 w-10 opacity-40" />
+              </div>
+              <p className="text-sm font-medium">All caught up!</p>
+              <p className="text-xs opacity-70 mt-1">No alerts to show</p>
               {!showAll && alerts.length > 0 && (
-                <Button variant="link" size="sm" onClick={() => setShowAll(true)}>
+                <Button 
+                  variant="link" 
+                  size="sm" 
+                  onClick={() => setShowAll(true)}
+                  className="mt-3"
+                >
                   View all alerts
                 </Button>
               )}
             </div>
           ) : (
-            <div className="space-y-2">
+            <div className="space-y-3">
               {highPriorityCount > 0 && (
-                <div className="flex items-center gap-2 px-2 py-1.5 bg-red-100 rounded-md mb-3">
-                  <AlertTriangle className="h-4 w-4 text-red-600" />
-                  <span className="text-sm font-medium text-red-800">
+                <div className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-rose-100 to-red-50 rounded-xl mb-4 shadow-sm animate-in fade-in-50 duration-300">
+                  <div className="p-1.5 rounded-lg bg-rose-200">
+                    <AlertTriangle className="h-4 w-4 text-rose-700" />
+                  </div>
+                  <span className="text-sm font-semibold text-rose-800 tracking-tight">
                     {highPriorityCount} student{highPriorityCount > 1 ? "s" : ""} need
                     {highPriorityCount === 1 ? "s" : ""} immediate attention
                   </span>
                 </div>
               )}
-              {visibleAlerts.map((alert) => (
-                <AlertItem
+              {visibleAlerts.map((alert, index) => (
+                <div
                   key={alert.id}
-                  alert={alert}
-                  onDismiss={() => onDismiss(alert.id)}
-                  onMarkRead={() => onMarkRead(alert.id)}
-                  onTakeAction={() => onTakeAction(alert)}
-                />
+                  className="animate-in fade-in-50 slide-in-from-right-2"
+                  style={{ animationDelay: `${index * 50}ms`, animationFillMode: "backwards" }}
+                >
+                  <AlertItem
+                    alert={alert}
+                    onDismiss={() => onDismiss(alert.id)}
+                    onMarkRead={() => onMarkRead(alert.id)}
+                    onTakeAction={() => onTakeAction(alert)}
+                  />
+                </div>
               ))}
             </div>
           )}
