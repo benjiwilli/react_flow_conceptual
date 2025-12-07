@@ -1,6 +1,13 @@
 /**
  * Classroom Dashboard Page
  * Real-time view of student progress during class sessions
+ * 
+ * Design Philosophy (Jony Ive Inspired):
+ * - Glass morphism for elevated surfaces
+ * - Generous breathing room in layout
+ * - Purposeful animations that inform, never distract
+ * - Typography as the primary design element
+ * - Honest presentation of real-time data
  */
 
 "use client"
@@ -23,6 +30,7 @@ import {
   AlertTriangle,
 } from "lucide-react"
 import Link from "next/link"
+import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { StudentGrid, type StudentStatus } from "@/components/classroom/student-grid"
@@ -322,111 +330,150 @@ export default function ClassroomPage() {
   const unreadAlertCount = alerts.filter((a) => !a.isRead).length
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Demo Mode Warning Banner */}
-      <div className="bg-amber-50 border-b border-amber-200 px-4 py-2">
-        <div className="container flex items-center gap-2 text-amber-800 text-sm">
-          <AlertTriangle className="h-4 w-4 shrink-0" />
-          <span>
-            <strong>Demo Mode:</strong> This dashboard shows simulated data. Authentication is not enabled.
-            See README.md for production deployment steps.
+    <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted/20">
+      {/* Demo Mode Warning Banner - Refined with subtle presence */}
+      <div className="bg-amber-50/80 backdrop-blur-sm border-b border-amber-200/50 px-4 py-2.5">
+        <div className="container flex items-center gap-3 text-amber-800 text-sm">
+          <AlertTriangle className="h-4 w-4 shrink-0 opacity-80" />
+          <span className="tracking-tight">
+            <strong className="font-semibold">Demo Mode:</strong>{" "}
+            <span className="text-amber-700">Simulated data for demonstration. See README.md for production setup.</span>
           </span>
         </div>
       </div>
 
-      {/* Header */}
-      <header className="sticky top-0 z-10 border-b bg-card/95 backdrop-blur">
-        <div className="container flex h-16 items-center justify-between px-4">
-          <div className="flex items-center gap-4">
+      {/* Header - Glass morphism with refined hierarchy */}
+      <header className="sticky top-0 z-10 border-b border-border/40 bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60">
+        <div className="container flex h-18 items-center justify-between px-6 py-4">
+          <div className="flex items-center gap-5">
             <Link
               href="/teacher"
-              className="text-muted-foreground hover:text-foreground transition-colors"
+              className="p-2 -ml-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all duration-200"
+              aria-label="Back to teacher dashboard"
             >
               <ArrowLeft className="h-5 w-5" />
             </Link>
-            <div>
-              <h1 className="text-xl font-semibold">Grade 4 - Math Word Problems</h1>
-              <p className="text-sm text-muted-foreground">Classroom ID: {classId}</p>
+            <div className="space-y-0.5">
+              <h1 className="text-xl font-semibold tracking-tight">Grade 4 - Math Word Problems</h1>
+              <p className="text-sm text-muted-foreground font-light tracking-wide">Classroom {classId}</p>
             </div>
-            {isSessionActive && (
-              <span className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-green-100 text-green-700 text-xs font-medium">
-                <Activity className="h-3 w-3 animate-pulse" />
-                Live Session
-              </span>
-            )}
-            {/* Connection status indicator */}
-            <span
-              className={`flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium ${
-                isConnected
-                  ? "bg-blue-100 text-blue-700"
-                  : realtimeError
-                  ? "bg-red-100 text-red-700"
-                  : "bg-yellow-100 text-yellow-700"
-              }`}
-              title={realtimeError || (isConnected ? "Real-time updates active" : "Using polling fallback")}
-            >
-              {isConnected ? (
-                <Wifi className="h-3 w-3" />
-              ) : (
-                <WifiOff className="h-3 w-3" />
+            
+            {/* Status indicators - Refined pill design */}
+            <div className="flex items-center gap-2 ml-2">
+              {isSessionActive && (
+                <span className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-500/10 text-green-700 text-xs font-medium ring-1 ring-green-500/20">
+                  <Activity className="h-3 w-3 animate-pulse" />
+                  Live Session
+                </span>
               )}
-              {isConnected ? "Live" : realtimeError ? "Error" : "Polling"}
-            </span>
+              <span
+                className={cn(
+                  "flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium ring-1 transition-colors duration-200",
+                  isConnected
+                    ? "bg-blue-500/10 text-blue-700 ring-blue-500/20"
+                    : realtimeError
+                    ? "bg-red-500/10 text-red-700 ring-red-500/20"
+                    : "bg-amber-500/10 text-amber-700 ring-amber-500/20"
+                )}
+                title={realtimeError || (isConnected ? "Real-time updates active" : "Using polling fallback")}
+              >
+                {isConnected ? (
+                  <Wifi className="h-3 w-3" />
+                ) : (
+                  <WifiOff className="h-3 w-3" />
+                )}
+                {isConnected ? "Real-time" : realtimeError ? "Connection Error" : "Polling"}
+              </span>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
+          
+          {/* Actions - Refined button group */}
+          <div className="flex items-center gap-3">
             <Button
               variant={showAlerts ? "secondary" : "outline"}
               size="icon"
-              className="relative"
+              className={cn(
+                "relative h-10 w-10 rounded-xl transition-all duration-200",
+                showAlerts && "bg-primary/10 text-primary ring-1 ring-primary/20"
+              )}
               onClick={() => setShowAlerts(!showAlerts)}
+              aria-label={`${unreadAlertCount} unread alerts`}
             >
               <Bell className="h-4 w-4" />
               {unreadAlertCount > 0 && (
-                <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 text-[10px] font-medium text-white flex items-center justify-center">
+                <span className="absolute -top-1.5 -right-1.5 h-5 w-5 rounded-full bg-red-500 text-[10px] font-semibold text-white flex items-center justify-center ring-2 ring-background animate-in zoom-in duration-200">
                   {unreadAlertCount}
                 </span>
               )}
             </Button>
+            
             {isSessionActive ? (
-              <Button variant="destructive" onClick={() => setIsSessionActive(false)}>
+              <Button 
+                variant="destructive" 
+                onClick={() => setIsSessionActive(false)}
+                className="h-10 px-4 rounded-xl font-medium transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+              >
                 <Pause className="h-4 w-4 mr-2" />
                 End Session
               </Button>
             ) : (
-              <Button onClick={() => setIsSessionActive(true)}>
+              <Button 
+                onClick={() => setIsSessionActive(true)}
+                className="h-10 px-4 rounded-xl font-medium transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+              >
                 <Play className="h-4 w-4 mr-2" />
                 Start Session
               </Button>
             )}
-            <Button variant="outline" size="icon">
+            
+            <Button 
+              variant="outline" 
+              size="icon"
+              className="h-10 w-10 rounded-xl transition-all duration-200 hover:bg-muted/50"
+              aria-label="Settings"
+            >
               <Settings className="h-4 w-4" />
             </Button>
           </div>
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="container px-4 py-6">
-        <div className="flex gap-6">
+      {/* Main Content - Generous spacing and breathing room */}
+      <main className="container px-6 py-8">
+        <div className="flex gap-8">
           {/* Main Panel */}
-          <div className={showAlerts ? "flex-1" : "w-full"}>
+          <div className={cn(
+            "transition-all duration-300 ease-out",
+            showAlerts ? "flex-1" : "w-full"
+          )}>
             <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <div className="flex items-center justify-between mb-6">
-                <TabsList>
-                  <TabsTrigger value="students" className="gap-2">
+              {/* Tab Navigation - Refined with subtle depth */}
+              <div className="flex items-center justify-between mb-8">
+                <TabsList className="h-12 p-1.5 bg-muted/50 backdrop-blur-sm rounded-2xl">
+                  <TabsTrigger 
+                    value="students" 
+                    className="gap-2.5 h-9 px-5 rounded-xl data-[state=active]:bg-background data-[state=active]:shadow-sm transition-all duration-200"
+                  >
                     <LayoutGrid className="h-4 w-4" />
-                    Students
+                    <span className="font-medium">Students</span>
                   </TabsTrigger>
-                  <TabsTrigger value="analytics" className="gap-2">
+                  <TabsTrigger 
+                    value="analytics" 
+                    className="gap-2.5 h-9 px-5 rounded-xl data-[state=active]:bg-background data-[state=active]:shadow-sm transition-all duration-200"
+                  >
                     <BarChart3 className="h-4 w-4" />
-                    Analytics
+                    <span className="font-medium">Analytics</span>
                   </TabsTrigger>
-                  <TabsTrigger value="assessments" className="gap-2">
+                  <TabsTrigger 
+                    value="assessments" 
+                    className="gap-2.5 h-9 px-5 rounded-xl data-[state=active]:bg-background data-[state=active]:shadow-sm transition-all duration-200"
+                  >
                     <Target className="h-4 w-4" />
-                    Assessments
+                    <span className="font-medium">Assessments</span>
                   </TabsTrigger>
                 </TabsList>
 
+                {/* Context Actions */}
                 <div className="flex items-center gap-2">
                   {activeTab === "analytics" && (
                     <ReportExport
@@ -445,11 +492,16 @@ export default function ClassroomPage() {
                     />
                   )}
                   {activeTab === "students" && (
-                    <>
+                    <div className="flex items-center gap-1 p-1 bg-muted/50 rounded-xl">
                       <Button
                         variant={viewMode === "grid" ? "secondary" : "ghost"}
                         size="icon"
                         onClick={() => setViewMode("grid")}
+                        className={cn(
+                          "h-9 w-9 rounded-lg transition-all duration-200",
+                          viewMode === "grid" && "bg-background shadow-sm"
+                        )}
+                        aria-label="Grid view"
                       >
                         <LayoutGrid className="h-4 w-4" />
                       </Button>
@@ -457,15 +509,21 @@ export default function ClassroomPage() {
                         variant={viewMode === "list" ? "secondary" : "ghost"}
                         size="icon"
                         onClick={() => setViewMode("list")}
+                        className={cn(
+                          "h-9 w-9 rounded-lg transition-all duration-200",
+                          viewMode === "list" && "bg-background shadow-sm"
+                        )}
+                        aria-label="List view"
                       >
                         <List className="h-4 w-4" />
                       </Button>
-                    </>
+                    </div>
                   )}
                 </div>
               </div>
 
-              <TabsContent value="students" className="mt-0">
+              {/* Tab Content - Smooth transitions */}
+              <TabsContent value="students" className="mt-0 animate-in fade-in-50 duration-300">
                 <StudentGrid
                   students={students}
                   onSelectStudent={handleSelectStudent}
@@ -476,7 +534,7 @@ export default function ClassroomPage() {
                 />
               </TabsContent>
 
-              <TabsContent value="analytics" className="mt-0">
+              <TabsContent value="analytics" className="mt-0 animate-in fade-in-50 duration-300">
                 <AnalyticsDashboard
                   metrics={metrics}
                   insights={MOCK_INSIGHTS}
@@ -484,21 +542,23 @@ export default function ClassroomPage() {
                 />
               </TabsContent>
 
-              <TabsContent value="assessments" className="mt-0">
+              <TabsContent value="assessments" className="mt-0 animate-in fade-in-50 duration-300">
                 <AssessmentBreakdown classId={classId} />
               </TabsContent>
             </Tabs>
           </div>
 
-          {/* Alerts Panel */}
+          {/* Alerts Panel - Slide-in with glass morphism */}
           {showAlerts && (
-            <div className="w-96 shrink-0">
-              <TeacherAlerts
-                alerts={alerts}
-                onDismiss={handleDismissAlert}
-                onMarkRead={handleMarkAlertRead}
-                onTakeAction={handleTakeAction}
-              />
+            <div className="w-[400px] shrink-0 animate-in slide-in-from-right-4 duration-300">
+              <div className="sticky top-28">
+                <TeacherAlerts
+                  alerts={alerts}
+                  onDismiss={handleDismissAlert}
+                  onMarkRead={handleMarkAlertRead}
+                  onTakeAction={handleTakeAction}
+                />
+              </div>
             </div>
           )}
         </div>

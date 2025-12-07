@@ -1,35 +1,54 @@
 "use client"
 
-/**
- * High Contrast Toggle Component
- * Allows users to enable high contrast mode for better visibility
- * WCAG 1.4.3 - Contrast (Minimum)
- */
-
-import { useEffect, useSyncExternalStore } from "react"
+import { useCallback, useEffect, useSyncExternalStore } from "react"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
-import { Contrast } from "lucide-react"
 
-// External store for high contrast preference
+// Store for high contrast preference
+let listeners: Array<() => void> = []
+
+function emitChange() {
+  for (const listener of listeners) {
+    listener()
+  }
+}
+
+function subscribe(callback: () => void): () => void {
+  listeners.push(callback)
+  
+  // Also listen to system preference changes
+  const mediaQuery = window.matchMedia("(prefers-contrast: more)")
+  const handleMedia = () => {
+    // Only update if no explicit user preference is stored
+    if (localStorage.getItem("high-contrast") === null) {
+      emitChange()
+    }
+  }
+  mediaQuery.addEventListener("change", handleMedia)
+  
+  return () => {
+    listeners = listeners.filter(l => l !== callback)
+    mediaQuery.removeEventListener("change", handleMedia)
+  }
+}
+
 function getSnapshot(): boolean {
   if (typeof window === "undefined") return false
-  return localStorage.getItem("high-contrast") === "true"
+  // Check localStorage first for explicit user preference
+  const stored = localStorage.getItem("high-contrast")
+  if (stored !== null) return stored === "true"
+  // Fall back to system preference
+  return window.matchMedia("(prefers-contrast: more)").matches
 }
 
 function getServerSnapshot(): boolean {
   return false
 }
 
-function subscribe(callback: () => void): () => void {
-  window.addEventListener("storage", callback)
-  return () => window.removeEventListener("storage", callback)
-}
-
 export function HighContrastToggle() {
   const enabled = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)
 
-  // Apply high contrast class when enabled changes
+  // Apply/remove high contrast class when state changes
   useEffect(() => {
     if (enabled) {
       document.documentElement.classList.add("high-contrast")
@@ -38,36 +57,19 @@ export function HighContrastToggle() {
     }
   }, [enabled])
 
-  const handleChange = (checked: boolean) => {
+  const handleToggle = useCallback((checked: boolean) => {
     localStorage.setItem("high-contrast", String(checked))
-    // Dispatch storage event to trigger re-render
-    window.dispatchEvent(new Event("storage"))
-    
-    if (checked) {
-      document.documentElement.classList.add("high-contrast")
-    } else {
-      document.documentElement.classList.remove("high-contrast")
-    }
-  }
+    emitChange()
+  }, [])
 
   return (
     <div className="flex items-center space-x-2">
       <Switch
         id="high-contrast"
         checked={enabled}
-        onCheckedChange={handleChange}
-        aria-describedby="high-contrast-description"
+        onCheckedChange={handleToggle}
       />
-      <Label 
-        htmlFor="high-contrast" 
-        className="flex items-center gap-2 cursor-pointer"
-      >
-        <Contrast className="h-4 w-4" />
-        High Contrast Mode
-      </Label>
-      <span id="high-contrast-description" className="sr-only">
-        Enable high contrast mode for improved visibility. This increases color contrast throughout the application.
-      </span>
+      <Label htmlFor="high-contrast" className="cursor-pointer">High Contrast Mode</Label>
     </div>
   )
 }

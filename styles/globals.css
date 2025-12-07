@@ -2,76 +2,226 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * VerbaPath Design System
+ * 
+ * Design Philosophy (Jony Ive inspired):
+ * - Purposeful simplicity over decorative complexity
+ * - Generous white space that lets content breathe
+ * - Typography as the primary design element
+ * - Subtle depth through refined shadows
+ * - Honest, confident presentation
+ * - Every element earns its place
+ * - Smooth, considered motion
+ */
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+  
+  /* Jony Ive-inspired transitions - gentle, considered motion */
+  .transition-gentle {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .transition-swift {
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .transition-elegant {
+    transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  
+  /* Refined shadow system - subtle depth */
+  .shadow-subtle {
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.03),
+                0 1px 3px 0 rgb(0 0 0 / 0.05);
+  }
+  
+  .shadow-elevated {
+    box-shadow: 0 2px 8px -2px rgb(0 0 0 / 0.05),
+                0 4px 16px -4px rgb(0 0 0 / 0.1);
+  }
+  
+  .shadow-floating {
+    box-shadow: 0 4px 12px -2px rgb(0 0 0 / 0.08),
+                0 8px 32px -8px rgb(0 0 0 / 0.12);
+  }
+  
+  .shadow-prominent {
+    box-shadow: 0 8px 24px -4px rgb(0 0 0 / 0.1),
+                0 16px 48px -8px rgb(0 0 0 / 0.15);
+  }
+  
+  /* Glass morphism - honest, layered surfaces */
+  .glass {
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+  }
+  
+  .glass-subtle {
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(12px) saturate(150%);
+    -webkit-backdrop-filter: blur(12px) saturate(150%);
+  }
+  
+  .glass-prominent {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(24px) saturate(200%);
+    -webkit-backdrop-filter: blur(24px) saturate(200%);
+  }
+  
+  /* Surface treatments */
+  .surface-inset {
+    box-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 0.04);
+  }
+  
+  .surface-raised {
+    box-shadow: 0 0 0 1px rgb(0 0 0 / 0.03),
+                0 1px 2px 0 rgb(0 0 0 / 0.05);
+  }
+  
+  /* Interactive states */
+  .interactive-lift {
+    @apply transition-gentle;
+  }
+  
+  .interactive-lift:hover {
+    transform: translateY(-1px);
+  }
+  
+  .interactive-lift:active {
+    transform: translateY(0);
+  }
+  
+  /* Typography refinements */
+  .tracking-tight-refined {
+    letter-spacing: -0.02em;
+  }
+  
+  .leading-snug-refined {
+    line-height: 1.35;
   }
 }
 
 @layer base {
   :root {
+    /* Core colors - refined, professional palette */
     --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
+    --foreground: 220 13% 9%;
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
+    --card-foreground: 220 13% 9%;
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
+    --popover-foreground: 220 13% 9%;
+    
+    /* Primary - confident, educational blue-black */
+    --primary: 220 13% 9%;
     --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
-    --destructive: 0 84.2% 60.2%;
+    
+    /* Secondary - warm, inviting neutral */
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 220 13% 9%;
+    
+    /* Muted - purposeful gray for supporting text */
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 9% 46%;
+    
+    /* Accent - subtle highlight */
+    --accent: 220 14% 96%;
+    --accent-foreground: 220 13% 9%;
+    
+    /* Destructive - warm, not aggressive */
+    --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
+    
+    /* Borders - barely there, honest */
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 220 13% 9%;
+    
+    /* Charts - vibrant but harmonious */
+    --chart-1: 221 83% 53%;
+    --chart-2: 142 76% 36%;
+    --chart-3: 262 83% 58%;
+    --chart-4: 43 96% 56%;
+    --chart-5: 0 84% 60%;
+    
+    /* Node category colors - distinct yet harmonious */
+    --node-learning: 221 83% 53%;     /* Blue - knowledge */
+    --node-ai: 262 83% 58%;           /* Purple - intelligence */
+    --node-scaffolding: 142 76% 36%;  /* Green - growth */
+    --node-interaction: 25 95% 53%;   /* Orange - engagement */
+    --node-flow: 220 9% 46%;          /* Gray - structure */
+    --node-output: 173 80% 40%;       /* Teal - results */
+    
+    /* Refined radius - softer, more approachable */
+    --radius: 0.625rem;
+    
+    /* Sidebar */
+    --sidebar-background: 220 14% 98%;
+    --sidebar-foreground: 220 13% 26%;
+    --sidebar-primary: 220 13% 10%;
     --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-accent: 220 14% 95%;
+    --sidebar-accent-foreground: 220 13% 10%;
     --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-ring: 221 83% 53%;
   }
   .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
+    /* Dark mode - equally refined, maintaining visual harmony */
+    --background: 222 14% 7%;
+    --foreground: 210 20% 95%;
+    --card: 222 14% 9%;
+    --card-foreground: 210 20% 95%;
+    --popover: 222 14% 9%;
+    --popover-foreground: 210 20% 95%;
+    
+    /* Primary - soft white in dark mode */
+    --primary: 210 20% 95%;
+    --primary-foreground: 222 14% 9%;
+    
+    /* Secondary - elevated dark surface */
+    --secondary: 222 14% 14%;
+    --secondary-foreground: 210 20% 95%;
+    
+    /* Muted - subtle dark surfaces */
+    --muted: 222 14% 14%;
+    --muted-foreground: 220 9% 60%;
+    
+    /* Accent */
+    --accent: 222 14% 14%;
+    --accent-foreground: 210 20% 95%;
+    
+    /* Destructive - softer in dark mode */
+    --destructive: 0 62% 45%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
+    
+    /* Borders - subtle but visible */
+    --border: 222 14% 18%;
+    --input: 222 14% 18%;
+    --ring: 221 83% 60%;
+    
+    /* Charts - vibrant on dark background */
+    --chart-1: 221 83% 60%;
+    --chart-2: 142 76% 45%;
+    --chart-3: 262 83% 65%;
+    --chart-4: 43 96% 60%;
+    --chart-5: 0 84% 65%;
+    
+    /* Node colors - adjusted for dark mode visibility */
+    --node-learning: 221 83% 60%;
+    --node-ai: 262 83% 65%;
+    --node-scaffolding: 142 76% 45%;
+    --node-interaction: 25 95% 60%;
+    --node-flow: 220 9% 55%;
+    --node-output: 173 80% 50%;
+    
+    /* Sidebar - dark variant */
+    --sidebar-background: 222 14% 8%;
+    --sidebar-foreground: 220 9% 85%;
+    --sidebar-primary: 221 83% 60%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 240 3.7% 15.9%;
     --sidebar-accent-foreground: 240 4.8% 95.9%;
@@ -84,7 +234,217 @@
   * {
     @apply border-border;
   }
+  
+  html {
+    /* Smooth scrolling for a premium feel */
+    scroll-behavior: smooth;
+    /* Prevent layout shift from scrollbar */
+    scrollbar-gutter: stable;
+  }
+  
   body {
     @apply bg-background text-foreground;
+    /* Refined typography base */
+    font-feature-settings: "cv11", "ss01";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
+  
+  /* Selection styling - subtle, intentional */
+  ::selection {
+    background: hsl(var(--primary) / 0.12);
+    color: hsl(var(--foreground));
+  }
+  
+  /* Focus states - accessible yet elegant */
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+    border-radius: var(--radius);
+  }
+  
+  /* Refined scrollbar for webkit browsers */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted-foreground) / 0.2);
+    border-radius: 100px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground) / 0.3);
+  }
+  
+  /* Headings - purposeful hierarchy */
+  h1, h2, h3, h4, h5, h6 {
+    @apply tracking-tight-refined;
+    font-weight: 500;
+  }
+  
+  h1 {
+    @apply leading-snug-refined;
+    font-weight: 500;
+  }
+  
+  /* Smooth image loading */
+  img {
+    transition: opacity 0.3s ease;
+  }
+  
+  img[loading] {
+    opacity: 0;
+  }
+  
+  img:not([loading]) {
+    opacity: 1;
+  }
+}
+
+/* Dark mode - equally refined */
+@layer base {
+  .dark {
+    --background: 220 13% 5%;
+    --foreground: 0 0% 95%;
+    --card: 220 13% 7%;
+    --card-foreground: 0 0% 95%;
+    --popover: 220 13% 7%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 0 0% 95%;
+    --primary-foreground: 220 13% 9%;
+    --secondary: 220 13% 12%;
+    --secondary-foreground: 0 0% 95%;
+    --muted: 220 13% 12%;
+    --muted-foreground: 220 9% 55%;
+    --accent: 220 13% 12%;
+    --accent-foreground: 0 0% 95%;
+    --destructive: 0 62% 40%;
+    --destructive-foreground: 0 0% 95%;
+    --border: 220 13% 15%;
+    --input: 220 13% 15%;
+    --ring: 0 0% 85%;
+    --chart-1: 221 83% 60%;
+    --chart-2: 142 76% 45%;
+    --chart-3: 262 83% 65%;
+    --chart-4: 43 96% 60%;
+    --chart-5: 0 84% 65%;
+    --sidebar-background: 220 13% 8%;
+    --sidebar-foreground: 220 9% 85%;
+    --sidebar-primary: 221 83% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 13% 12%;
+    --sidebar-accent-foreground: 220 9% 85%;
+    --sidebar-border: 220 13% 15%;
+    --sidebar-ring: 221 83% 55%;
+  }
+  
+  /* Dark mode glass morphism */
+  .dark .glass {
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+  }
+  
+  .dark .glass-subtle {
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(12px) saturate(130%);
+    -webkit-backdrop-filter: blur(12px) saturate(130%);
+  }
+  
+  .dark .glass-prominent {
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+  }
+}
+
+/* Animation keyframes for premium interactions */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fade-up {
+  from { 
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scale-in {
+  from { 
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to { 
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slide-down {
+  from { 
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-gentle {
+  0%, 100% { 
+    opacity: 1;
+  }
+  50% { 
+    opacity: 0.7;
+  }
+}
+
+/* Utility animation classes */
+@layer utilities {
+  .animate-fade-in {
+    animation: fade-in 0.3s ease-out forwards;
+  }
+  
+  .animate-fade-up {
+    animation: fade-up 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  
+  .animate-scale-in {
+    animation: scale-in 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  
+  .animate-slide-down {
+    animation: slide-down 0.3s ease-out forwards;
+  }
+  
+  .animate-pulse-gentle {
+    animation: pulse-gentle 2s ease-in-out infinite;
+  }
+  
+  /* Stagger children for orchestrated animations */
+  .stagger-children > * {
+    animation: fade-up 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    opacity: 0;
+  }
+  
+  .stagger-children > *:nth-child(1) { animation-delay: 0ms; }
+  .stagger-children > *:nth-child(2) { animation-delay: 50ms; }
+  .stagger-children > *:nth-child(3) { animation-delay: 100ms; }
+  .stagger-children > *:nth-child(4) { animation-delay: 150ms; }
+  .stagger-children > *:nth-child(5) { animation-delay: 200ms; }
+  .stagger-children > *:nth-child(6) { animation-delay: 250ms; }
 }

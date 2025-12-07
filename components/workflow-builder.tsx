@@ -227,11 +227,11 @@ export function WorkflowBuilder({ initialWorkflow }: WorkflowBuilderProps) {
   return (
     <ReactFlowProvider>
       <div className="flex flex-col h-screen bg-background">
-        {/* Header */}
-        <header className="flex items-center justify-between px-4 py-2 border-b bg-card">
+        {/* Header - Refined glass morphism */}
+        <header className="flex items-center justify-between px-4 md:px-6 py-3 border-b border-border/50 bg-card/80 backdrop-blur-sm shadow-subtle">
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
+            <div className="flex items-center gap-3">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary shadow-subtle transition-all duration-300 hover:scale-105 hover:shadow-elevated">
                 <GraduationCap className="h-5 w-5 text-primary-foreground" />
               </div>
               <div>
@@ -241,7 +241,7 @@ export function WorkflowBuilder({ initialWorkflow }: WorkflowBuilderProps) {
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 md:gap-2">
             <div className="hidden md:flex mr-2">
               <HighContrastToggle />
             </div>
@@ -249,14 +249,15 @@ export function WorkflowBuilder({ initialWorkflow }: WorkflowBuilderProps) {
               variant={showTemplates ? "secondary" : "outline"}
               size="sm"
               onClick={() => setShowTemplates(!showTemplates)}
+              className="transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
             >
-              <FileStack className="h-4 w-4 mr-2" />
-              Templates
+              <FileStack className="h-4 w-4 mr-1.5" />
+              <span className="hidden sm:inline">Templates</span>
             </Button>
             <Button 
               variant={showPreview ? "secondary" : "outline"} 
               size="sm" 
-              className="hidden sm:flex"
+              className="hidden sm:flex transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
               onClick={() => {
                 setShowPreview(!showPreview)
                 if (!showPreview) {
@@ -265,19 +266,33 @@ export function WorkflowBuilder({ initialWorkflow }: WorkflowBuilderProps) {
                 }
               }}
             >
-              {showPreview ? <EyeOff className="h-4 w-4 mr-2" /> : <Eye className="h-4 w-4 mr-2" />}
+              {showPreview ? <EyeOff className="h-4 w-4 mr-1.5" /> : <Eye className="h-4 w-4 mr-1.5" />}
               Preview
             </Button>
-            <Button variant="outline" size="sm" onClick={loadWorkflow}>
-              <Upload className="h-4 w-4 mr-2" />
-              Load
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={loadWorkflow}
+              className="transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+            >
+              <Upload className="h-4 w-4 mr-1.5" />
+              <span className="hidden sm:inline">Load</span>
             </Button>
-            <Button variant="outline" size="sm" onClick={saveWorkflow}>
-              <Save className="h-4 w-4 mr-2" />
-              Save
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={saveWorkflow}
+              className="transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+            >
+              <Save className="h-4 w-4 mr-1.5" />
+              <span className="hidden sm:inline">Save</span>
             </Button>
-            <Button size="sm" onClick={executeWorkflow}>
-              <Play className="h-4 w-4 mr-2" />
+            <Button 
+              size="sm" 
+              onClick={executeWorkflow}
+              className="shadow-subtle hover:shadow-elevated transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+            >
+              <Play className="h-4 w-4 mr-1.5" />
               Run
             </Button>
           </div>
@@ -288,18 +303,18 @@ export function WorkflowBuilder({ initialWorkflow }: WorkflowBuilderProps) {
           {/* Left Sidebar - Node Palette */}
           <aside
             className={cn(
-              "border-r bg-card transition-all duration-200",
+              "border-r border-border/50 bg-card/50 backdrop-blur-sm transition-all duration-300 ease-out",
               isPaletteOpen ? "w-72" : "w-0"
             )}
           >
             {isPaletteOpen && (
-              <div className="flex flex-col h-full">
-                <div className="flex items-center justify-between p-3 border-b">
-                  <h2 className="font-semibold text-sm">Node Library</h2>
+              <div className="flex flex-col h-full animate-fade-in">
+                <div className="flex items-center justify-between px-4 py-3 border-b border-border/50">
+                  <h2 className="font-medium text-sm text-foreground">Node Library</h2>
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-7 w-7 lg:hidden"
+                    className="h-7 w-7 lg:hidden hover:bg-secondary/60 transition-colors"
                     onClick={() => setIsPaletteOpen(false)}
                   >
                     <X className="h-4 w-4" />
@@ -315,7 +330,7 @@ export function WorkflowBuilder({ initialWorkflow }: WorkflowBuilderProps) {
             <Button
               variant="outline"
               size="icon"
-              className="absolute left-2 top-20 z-10 lg:hidden"
+              className="absolute left-3 top-20 z-10 lg:hidden shadow-elevated hover:shadow-floating transition-all duration-200"
               onClick={() => setIsPaletteOpen(true)}
             >
               <Menu className="h-4 w-4" />
@@ -323,10 +338,10 @@ export function WorkflowBuilder({ initialWorkflow }: WorkflowBuilderProps) {
           )}
 
           {/* Canvas */}
-          <main className="flex-1 flex flex-col overflow-hidden relative">
+          <main className="flex-1 flex flex-col overflow-hidden relative bg-secondary/20">
             {/* Template Browser Overlay */}
             {showTemplates && (
-              <div className="absolute inset-0 z-20 bg-background/95 backdrop-blur-sm">
+              <div className="absolute inset-0 z-20 bg-background/80 backdrop-blur-md animate-fade-in">
                 <TemplateBrowser
                   onSelectTemplate={loadTemplate}
                   onClose={() => setShowTemplates(false)}
@@ -366,27 +381,31 @@ export function WorkflowBuilder({ initialWorkflow }: WorkflowBuilderProps) {
           {/* Right Sidebar - Node Inspector or Preview Panel */}
           <aside
             className={cn(
-              "border-l bg-card transition-all duration-200",
+              "border-l border-border/50 bg-card/50 backdrop-blur-sm transition-all duration-300 ease-out",
               (isInspectorOpen && selectedNode) || showPreview ? "w-80" : "w-0"
             )}
           >
             {showPreview ? (
-              <PreviewPanel
-                nodes={nodes}
-                edges={edges}
-                className="h-full"
-                onClose={() => setShowPreview(false)}
-              />
+              <div className="animate-fade-in h-full">
+                <PreviewPanel
+                  nodes={nodes}
+                  edges={edges}
+                  className="h-full"
+                  onClose={() => setShowPreview(false)}
+                />
+              </div>
             ) : (
               isInspectorOpen && selectedNode && (
-                <NodeInspector
-                  node={selectedNode}
-                  onUpdateNodeData={updateNodeData}
-                  onClose={() => {
-                    setSelectedNode(null)
-                    setIsInspectorOpen(false)
-                  }}
-                />
+                <div className="animate-fade-in h-full">
+                  <NodeInspector
+                    node={selectedNode}
+                    onUpdateNodeData={updateNodeData}
+                    onClose={() => {
+                      setSelectedNode(null)
+                      setIsInspectorOpen(false)
+                    }}
+                  />
+                </div>
               )
             )}
           </aside>
