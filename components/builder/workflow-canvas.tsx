@@ -240,11 +240,11 @@ export function WorkflowCanvas({
         snapGrid={[15, 15]}
         className="bg-muted/20"
       >
-        <Background variant={BackgroundVariant.Dots} gap={12} size={1} className="opacity-50" />
-        <Controls className="bg-card border-border shadow-sm" />
+        <Background variant={BackgroundVariant.Dots} gap={20} size={1} className="opacity-40" />
+        <Controls className="bg-card/80 backdrop-blur-md border-border/50 shadow-subtle m-4" />
         <MiniMap 
-          className="bg-card border-border shadow-sm" 
-          maskColor="rgba(0, 0, 0, 0.1)"
+          className="bg-card/80 backdrop-blur-md border-border/50 shadow-subtle m-4 rounded-xl overflow-hidden" 
+          maskColor="rgba(0, 0, 0, 0.05)"
           nodeColor={(node) => {
             const category = (node.data as { category?: string } | undefined)?.category || 'flow'
             switch(category) {

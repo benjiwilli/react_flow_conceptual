@@ -69,13 +69,13 @@ export default function Home() {
           </p>
           
           <div className="flex items-center justify-center gap-4">
-            <Button size="lg" className="rounded-full px-8 h-12 text-base" asChild>
+            <Button size="lg" className="rounded-full px-8 h-12 text-base shadow-elevated hover:shadow-lg transition-all hover:scale-105 active:scale-95" asChild>
               <Link href="/teacher/builder">
                 Start Building
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
-            <Button size="lg" variant="ghost" className="rounded-full px-8 h-12 text-base" asChild>
+            <Button size="lg" variant="ghost" className="rounded-full px-8 h-12 text-base hover:bg-secondary/80 transition-all hover:scale-105 active:scale-95" asChild>
               <Link href="/classroom/demo">
                 View Demo
               </Link>
@@ -218,7 +218,7 @@ interface FeatureBlockProps {
 
 function FeatureBlock({ title, description }: FeatureBlockProps) {
   return (
-    <div className="group">
+    <div className="group p-6 rounded-2xl transition-all duration-300 hover:bg-secondary/40 hover:backdrop-blur-sm">
       <h3 className="text-lg font-medium mb-2 transition-gentle group-hover:text-primary">
         {title}
       </h3>

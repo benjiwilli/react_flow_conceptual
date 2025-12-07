@@ -82,7 +82,7 @@ export const GenericVerbaPathNode = memo(({ data, selected, type }: NodeProps) =
   return (
     <div
       className={cn(
-        "min-w-[200px] rounded-lg border-2 bg-card p-4 shadow-md transition-all",
+        "min-w-[200px] rounded-2xl border bg-card p-4 shadow-sm hover:shadow-md transition-all duration-300",
         selected ? "border-primary ring-2 ring-primary/20" : colors.border
       )}
     >
@@ -91,7 +91,7 @@ export const GenericVerbaPathNode = memo(({ data, selected, type }: NodeProps) =
         <Handle
           type="target"
           position={Position.Left}
-          className={cn("h-3 w-3 rounded-full border-2 bg-white", colors.border)}
+          className={cn("h-3 w-3 rounded-full border-2 bg-background transition-transform hover:scale-125", colors.border)}
         />
       )}
 
@@ -134,7 +134,7 @@ export const GenericVerbaPathNode = memo(({ data, selected, type }: NodeProps) =
         <Handle
           type="source"
           position={Position.Right}
-          className={cn("h-3 w-3 rounded-full border-2 bg-white", colors.border)}
+          className={cn("h-3 w-3 rounded-full border bg-background transition-transform hover:scale-125", colors.border)}
         />
       )}
     </div>
