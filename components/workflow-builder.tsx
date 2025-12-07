@@ -1,12 +1,12 @@
 "use client"
 
 /**
- * LinguaFlow Workflow Builder
+ * VerbaPath Workflow Builder
  * Main component for creating AI-powered ESL learning pathways
  *
  * Layout:
  * ┌─────────────────────────────────────────────────────────────────────────┐
- * │ LinguaFlow                                    [Preview] [Save] [Share]  │
+ * │ VerbaPath                                     [Preview] [Save] [Share]  │
  * ├──────────────┬──────────────────────────────────────────┬───────────────┤
  * │              │                                          │               │
  * │  NODE        │                                          │  INSPECTOR    │
@@ -30,10 +30,10 @@ import { ExecutionPanel, useExecutionPanel } from "@/components/builder/executio
 import { TemplateBrowser } from "@/components/builder/template-browser"
 import { PreviewPanel } from "@/components/builder/preview-panel"
 import { HighContrastToggle } from "@/components/accessibility/high-contrast-toggle"
-import type { LinguaFlowWorkflow } from "@/lib/types/workflow"
+import type { VerbaPathWorkflow } from "@/lib/types/workflow"
 import type { StudentProfile } from "@/lib/types/student"
 import { WorkflowCanvas } from "@/components/builder/workflow-canvas"
-import type { LinguaFlowNodeData } from "@/lib/types/nodes"
+import type { VerbaPathNodeData } from "@/lib/types/nodes"
 import type { WorkflowTemplate } from "@/lib/constants/workflow-templates"
 
 interface WorkflowBuilderProps {
@@ -58,11 +58,11 @@ export function WorkflowBuilder({ initialWorkflow }: WorkflowBuilderProps) {
 
   // Execution state
   const buildExecutionPayload = useCallback(() => {
-    const workflow: LinguaFlowWorkflow = {
+    const workflow: VerbaPathWorkflow = {
       id: crypto.randomUUID(),
       name: "Builder Workflow",
       description: "Ad-hoc builder execution",
-      nodes: nodes as unknown as LinguaFlowWorkflow["nodes"],
+      nodes: nodes as unknown as VerbaPathWorkflow["nodes"],
       edges,
       targetGrades: [],
       targetELPALevels: [],
@@ -110,7 +110,7 @@ export function WorkflowBuilder({ initialWorkflow }: WorkflowBuilderProps) {
 
   // Update node data from inspector
   const updateNodeData = useCallback(
-    (nodeId: string, data: Partial<LinguaFlowNodeData>) => {
+    (nodeId: string, data: Partial<VerbaPathNodeData>) => {
       setNodes((nds) =>
         nds.map((node) => {
           if (node.id === nodeId) {
@@ -142,7 +142,7 @@ export function WorkflowBuilder({ initialWorkflow }: WorkflowBuilderProps) {
     }
 
     const workflow = { nodes, edges }
-    localStorage.setItem("linguaflow-workflow", JSON.stringify(workflow))
+    localStorage.setItem("verbapath-workflow", JSON.stringify(workflow))
 
     toast({
       title: "Workflow saved",
@@ -152,7 +152,7 @@ export function WorkflowBuilder({ initialWorkflow }: WorkflowBuilderProps) {
 
   // Load workflow
   const loadWorkflow = useCallback(() => {
-    const saved = localStorage.getItem("linguaflow-workflow")
+    const saved = localStorage.getItem("verbapath-workflow")
     if (!saved) {
       toast({
         title: "No saved workflow",
@@ -235,7 +235,7 @@ export function WorkflowBuilder({ initialWorkflow }: WorkflowBuilderProps) {
                 <GraduationCap className="h-5 w-5 text-primary-foreground" />
               </div>
               <div>
-                <h1 className="text-lg font-bold text-foreground">LinguaFlow</h1>
+                <h1 className="text-lg font-medium tracking-tight text-foreground">VerbaPath</h1>
                 <p className="text-xs text-muted-foreground">Learning Pathway Builder</p>
               </div>
             </div>

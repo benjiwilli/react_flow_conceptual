@@ -7,7 +7,7 @@ import { Suspense } from "react"
 import { WorkflowBuilder } from "@/components/workflow-builder"
 
 export const metadata = {
-  title: "Learning Pathway Builder | LinguaFlow",
+  title: "Learning Pathway Builder | VerbaPath",
   description: "Create personalized learning pathways for ESL students",
 }
 

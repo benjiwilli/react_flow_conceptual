@@ -16,7 +16,7 @@ export function TeacherDashboard() {
       {/* Header */}
       <header className="border-b bg-card">
         <div className="container flex h-16 items-center justify-between px-4">
-          <h1 className="text-xl font-semibold">LinguaFlow</h1>
+          <h1 className="text-xl font-semibold">VerbaPath</h1>
           <nav className="flex items-center gap-4">
             <Link href="/teacher/builder">
               <Button>

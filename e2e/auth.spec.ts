@@ -15,9 +15,9 @@ test.describe("Authentication", () => {
     await page.goto("/login")
     await page.waitForLoadState("networkidle")
     
-    await expect(page).toHaveTitle(/LinguaFlow/)
-    // The actual heading is "Welcome to LinguaFlow"
-    await expect(page.getByText("Welcome to LinguaFlow")).toBeVisible()
+    await expect(page).toHaveTitle(/VerbaPath/)
+    // The actual heading is "Welcome to VerbaPath"
+    await expect(page.getByText("Welcome to VerbaPath")).toBeVisible()
     await expect(page.getByLabel(/email/i)).toBeVisible()
     await expect(page.getByLabel(/password/i)).toBeVisible()
     await expect(page.getByRole("button", { name: /sign in$/i })).toBeVisible()

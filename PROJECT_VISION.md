@@ -1,8 +1,8 @@
-# LinguaFlow: AI-Powered ESL Learning Orchestrator for Alberta K-12
+# VerbaPath: AI-Powered ESL Learning Orchestrator for Alberta K-12
 
 ## Executive Summary
 
-LinguaFlow transforms the existing React Flow node-based workflow builder into a specialized **AI Agent Orchestration Platform** designed specifically for **English as a Second Language (ESL) students in Alberta's K-12 education system**. The platform enables educators to create personalized, adaptive learning pathways that connect multiple AI models to deliver scaffolded literacy and numeracy instruction tailored to each student's proficiency level, native language, and cultural context.
+VerbaPath transforms the existing React Flow node-based workflow builder into a specialized **AI Agent Orchestration Platform** designed specifically for **English as a Second Language (ESL) students in Alberta's K-12 education system**. The platform enables educators to create personalized, adaptive learning pathways that connect multiple AI models to deliver scaffolded literacy and numeracy instruction tailored to each student's proficiency level, native language, and cultural context.
 
 ---
 
@@ -21,7 +21,7 @@ Current solutions are either too generic (one-size-fits-all AI tutors) or too la
 
 ### The Solution
 
-LinguaFlow provides a **visual workflow builder** where educators design "Learning Pathways" - chains of AI-powered nodes that automatically adapt content to each student's profile. A single pathway can serve an entire classroom, with personalization happening automatically at runtime.
+VerbaPath provides a **visual workflow builder** where educators design "Learning Pathways" - chains of AI-powered nodes that automatically adapt content to each student's profile. A single pathway can serve an entire classroom, with personalization happening automatically at runtime.
 
 **Example Workflow: "Math Word Problem Decoder"**
 \`\`\`
@@ -505,7 +505,7 @@ async function executeAINode(node: AIModelNode, context: ExecutionContext) {
 #### Layout
 \`\`\`
 ┌─────────────────────────────────────────────────────────────────────────┐
-│ LinguaFlow                                    [Preview] [Save] [Share]  │
+│ VerbaPath                                    [Preview] [Save] [Share]  │
 ├──────────────┬──────────────────────────────────────────┬───────────────┤
 │              │                                          │               │
 │  NODE        │                                          │  INSPECTOR    │
@@ -552,7 +552,7 @@ async function executeAINode(node: AIModelNode, context: ExecutionContext) {
 #### Layout (Responsive)
 \`\`\`
 ┌─────────────────────────────────────────────────────────────┐
-│ ☰   LinguaFlow   [?]                           Hi, Maria!  │
+│ ☰   VerbaPath   [?]                           Hi, Maria!  │
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
 │   ┌─────────────────────────────────────────────────────┐   │
@@ -1191,7 +1191,7 @@ When implementing this project, create files in this order to manage dependencie
 
 ## Conclusion
 
-LinguaFlow represents a paradigm shift in ESL education technology: from generic AI tutors to teacher-designed, student-personalized learning pathways. By leveraging the power of AI orchestration while keeping educators in control, we can deliver truly differentiated instruction at scale - meeting each of Alberta's diverse learners exactly where they are.
+VerbaPath represents a paradigm shift in ESL education technology: from generic AI tutors to teacher-designed, student-personalized learning pathways. By leveraging the power of AI orchestration while keeping educators in control, we can deliver truly differentiated instruction at scale - meeting each of Alberta's diverse learners exactly where they are.
 
 The existing React Flow codebase provides an excellent foundation. With systematic implementation of this plan, we can transform it into a powerful tool that serves Alberta's ESL students while respecting their linguistic and cultural assets.
 
@@ -1199,4 +1199,4 @@ The existing React Flow codebase provides an excellent foundation. With systemat
 
 *Document Version: 1.0*
 *Created: December 2024*
-*For: LinguaFlow Development Team*
+*For: VerbaPath Development Team*

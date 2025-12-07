@@ -3,7 +3,7 @@
  * Pre-built learning pathway templates for common ESL scenarios
  */
 
-import type { LinguaFlowNode, LinguaFlowEdge, LinguaFlowWorkflow } from "@/lib/types/workflow"
+import type { VerbaPathNode, VerbaPathEdge, VerbaPathWorkflow } from "@/lib/types/workflow"
 
 export interface WorkflowTemplate {
   id: string
@@ -14,8 +14,8 @@ export interface WorkflowTemplate {
   elpaLevels: number[]
   tags: string[]
   thumbnail?: string
-  nodes: LinguaFlowNode[]
-  edges: LinguaFlowEdge[]
+  nodes: VerbaPathNode[]
+  edges: VerbaPathEdge[]
 }
 
 // ============================================================================
@@ -673,7 +673,7 @@ export const createWorkflowFromTemplate = (
     name?: string
     authorId?: string
   } = {}
-): Omit<LinguaFlowWorkflow, "id" | "createdAt" | "updatedAt"> => {
+): Omit<VerbaPathWorkflow, "id" | "createdAt" | "updatedAt"> => {
   return {
     name: options.name || `${template.name} (Copy)`,
     description: template.description,

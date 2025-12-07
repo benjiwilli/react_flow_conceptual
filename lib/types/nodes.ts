@@ -1,5 +1,5 @@
 /**
- * Comprehensive Node Type Definitions for LinguaFlow
+ * Comprehensive Node Type Definitions for VerbaPath
  * ESL-focused AI Orchestration Platform for Alberta K-12
  */
 
@@ -573,7 +573,7 @@ export interface PortDefinition {
 // Typed Node Helper
 // ============================================================================
 
-export type LinguaFlowNodeData =
+export type VerbaPathNodeData =
   | StudentProfileNodeData
   | CurriculumSelectorNodeData
   | ContentGeneratorNodeData
@@ -604,5 +604,5 @@ export type LinguaFlowNodeData =
   | CelebrationNodeData
   | SpeakingAssessmentNodeData
 
-// LinguaFlowNode uses Node type with a generic Record to satisfy the constraint
-export type LinguaFlowNode = Node<Record<string, unknown> & Partial<LinguaFlowNodeData>, AllNodeTypes>
+// VerbaPathNode uses Node type with a generic Record to satisfy the constraint
+export type VerbaPathNode = Node<Record<string, unknown> & Partial<VerbaPathNodeData>, AllNodeTypes>

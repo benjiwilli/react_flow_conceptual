@@ -1,5 +1,5 @@
 /**
- * Test Utilities for LinguaFlow
+ * Test Utilities for VerbaPath
  * Custom render functions and test helpers
  */
 

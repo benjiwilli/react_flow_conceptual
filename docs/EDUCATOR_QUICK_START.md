@@ -1,12 +1,12 @@
-# 🎓 LinguaFlow Educator Quick Start Guide
+# 🎓 VerbaPath Educator Quick Start Guide
 
 **Get started with AI-powered ESL learning pathways in under 5 minutes**
 
 ---
 
-## 🚀 What is LinguaFlow?
+## 🚀 What is VerbaPath?
 
-LinguaFlow is an **AI-Powered ESL Learning Orchestrator** designed specifically for Alberta K-12 educators. It helps you:
+VerbaPath is an **AI-Powered ESL Learning Orchestrator** designed specifically for Alberta K-12 educators. It helps you:
 
 - ✨ Create **personalized learning pathways** for ESL students
 - 🌍 Support students' **native languages** (14+ languages)
@@ -19,7 +19,7 @@ LinguaFlow is an **AI-Powered ESL Learning Orchestrator** designed specifically 
 
 ### Step 1: Open the Application
 
-Navigate to: **[Your LinguaFlow URL]**
+Navigate to: **[Your VerbaPath URL]**
 
 > In demo mode, no login is required. You'll see a yellow banner indicating "Demo Mode" - this means you can explore all features freely!
 
@@ -54,7 +54,7 @@ You now have a complete learning pathway ready to customize!
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│  LinguaFlow                      [Templates] [Load] [Save] [Run]│
+│  VerbaPath                      [Templates] [Load] [Save] [Run]│
 ├───────────┬─────────────────────────────────┬───────────────────┤
 │           │                                 │                   │
 │  Node     │      Workflow Canvas            │    Node           │
@@ -136,7 +136,7 @@ Navigate to `/teacher/classroom` to see:
 
 ## 🌍 Language Support
 
-LinguaFlow supports **14+ native languages** for L1 bridging:
+VerbaPath supports **14+ native languages** for L1 bridging:
 
 | Language | Flag | Language | Flag |
 |----------|------|----------|------|
@@ -249,7 +249,7 @@ You now have everything you need to:
 - ✅ Support diverse language learners
 - ✅ Monitor classroom progress
 
-**Start creating engaging ESL lessons with LinguaFlow today!**
+**Start creating engaging ESL lessons with VerbaPath today!**
 
 ---
 
@@ -266,4 +266,4 @@ You now have everything you need to:
 
 ---
 
-*LinguaFlow v1.0 - AI-Powered ESL Learning Orchestrator for Alberta K-12*
+*VerbaPath v1.0 - AI-Powered ESL Learning Orchestrator for Alberta K-12*

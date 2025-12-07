@@ -1,5 +1,5 @@
 /**
- * Workflow Execution Types for LinguaFlow
+ * Workflow Execution Types for VerbaPath
  * Managing AI orchestration and node execution
  */
 

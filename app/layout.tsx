@@ -11,9 +11,9 @@ import '@/styles/accessibility-fixes.css'
 import '@/styles/high-contrast.css'
 
 export const metadata: Metadata = {
-  title: 'LinguaFlow - AI-Powered ESL Learning Orchestrator',
-  description: 'Adaptive learning pathways for Alberta K-12 ESL students',
-  generator: 'LinguaFlow',
+  title: 'VerbaPath - AI-Powered ESL Learning Orchestrator',
+  description: 'Beautifully simple, powerfully personalized learning pathways for Alberta K-12 ESL students',
+  generator: 'VerbaPath',
 }
 
 export default function RootLayout({

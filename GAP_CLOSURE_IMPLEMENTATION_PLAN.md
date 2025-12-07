@@ -1,4 +1,4 @@
-# 🎯 LinguaFlow Gap Closure Implementation Plan
+# 🎯 VerbaPath Gap Closure Implementation Plan
 
 **Document Version:** 1.0  
 **Created:** December 6, 2025  
@@ -308,7 +308,7 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-slate-50">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>Welcome to LinguaFlow</CardTitle>
+          <CardTitle>Welcome to VerbaPath</CardTitle>
           <CardDescription>Sign in to your account</CardDescription>
         </CardHeader>
         <CardContent>
@@ -1667,7 +1667,7 @@ expect.extend(toHaveNoViolations)
 File: `lib/engine/__tests__/test-helpers.ts`
 
 ```typescript
-import type { LinguaFlowNode, ExecutionContext } from "@/lib/types"
+import type { VerbaPathNode, ExecutionContext } from "@/lib/types"
 import type { StudentProfile } from "@/lib/types/student"
 
 export const mockStudent: StudentProfile = {
@@ -1699,7 +1699,7 @@ export const mockContext: ExecutionContext = {
   adaptations: []
 }
 
-export const createMockNode = (overrides = {}): LinguaFlowNode => ({
+export const createMockNode = (overrides = {}): VerbaPathNode => ({
   id: "node-123",
   type: "student-profile",
   position: { x: 0, y: 0 },
@@ -2338,7 +2338,7 @@ interface PreviewContextType {
   mockStudent: StudentProfile
   execution: WorkflowExecution | null
   isExecuting: boolean
-  startPreview: (workflow: LinguaFlowWorkflow) => void
+  startPreview: (workflow: VerbaPathWorkflow) => void
   stopPreview: () => void
   updateMockStudent: (updates: Partial<StudentProfile>) => void
 }
@@ -2370,7 +2370,7 @@ export function PreviewProvider({ children }: { children: React.ReactNode }) {
   const [execution, setExecution] = useState<WorkflowExecution | null>(null)
   const [isExecuting, setIsExecuting] = useState(false)
 
-  const startPreview = async (workflow: LinguaFlowWorkflow) => {
+  const startPreview = async (workflow: VerbaPathWorkflow) => {
     setIsPreviewMode(true)
     setIsExecuting(true)
     
@@ -2435,7 +2435,7 @@ File: `app/api/execute/preview/route.ts`
 ```typescript
 import { NextResponse } from "next/server"
 import { WorkflowExecutor } from "@/lib/engine/executor"
-import type { LinguaFlowWorkflow, StudentProfile } from "@/lib/types"
+import type { VerbaPathWorkflow, StudentProfile } from "@/lib/types"
 
 export async function POST(request: Request) {
   try {
@@ -2486,7 +2486,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { LearningInterface } from "@/components/student/learning-interface"
 
 interface PreviewPanelProps {
-  workflow: LinguaFlowWorkflow
+  workflow: VerbaPathWorkflow
 }
 
 export function PreviewPanel({ workflow }: PreviewPanelProps) {

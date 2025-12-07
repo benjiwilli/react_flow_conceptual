@@ -2,7 +2,7 @@
 
 /**
  * Workflow Canvas Component
- * Enhanced React Flow canvas with LinguaFlow-specific features
+ * Enhanced React Flow canvas with VerbaPath-specific features
  */
 
 import { useCallback, useMemo, useRef, useState } from "react"
@@ -54,7 +54,7 @@ import { CodeNode } from "@/components/nodes/code-node"
 import CustomEdge from "@/components/custom-edge"
 
 // Import generic node component for new types
-import { GenericLinguaFlowNode } from "./generic-node"
+import { GenericVerbaPathNode } from "./generic-node"
 
 // Build node types mapping
 // Using 'any' to avoid strict type incompatibility with React Flow v12
@@ -71,28 +71,28 @@ const nodeTypes: Record<string, any> = {
   "reading-passage": ReadingPassageNode,
   // AI Nodes
   "ai-model": AIModelNode,
-  "prompt-template": GenericLinguaFlowNode,
-  "structured-output": GenericLinguaFlowNode,
+  "prompt-template": GenericVerbaPathNode,
+  "structured-output": GenericVerbaPathNode,
   // Scaffolding Nodes
-  "visual-support": GenericLinguaFlowNode,
+  "visual-support": GenericVerbaPathNode,
   // Interaction Nodes
   "human-input": HumanInLoopNode,
-  "voice-input": GenericLinguaFlowNode,
+  "voice-input": GenericVerbaPathNode,
   "comprehension-check": ComprehensionCheckNode,
-  "multiple-choice": GenericLinguaFlowNode,
-  "free-response": GenericLinguaFlowNode,
+  "multiple-choice": GenericVerbaPathNode,
+  "free-response": GenericVerbaPathNode,
   // Flow Control Nodes
   "proficiency-router": RouterNode,
   router: RouterNode,
   loop: LoopNode,
-  merge: GenericLinguaFlowNode,
+  merge: GenericVerbaPathNode,
   parallel: ParallelNode,
   conditional: ConditionalNode,
-  variable: GenericLinguaFlowNode,
+  variable: GenericVerbaPathNode,
   // Output Nodes
   "progress-tracker": ProgressTrackerNode,
   feedback: FeedbackGeneratorNode,
-  celebration: GenericLinguaFlowNode,
+  celebration: GenericVerbaPathNode,
   "speaking-assessment": SpeakingAssessmentNode,
   // Original Nodes
   input: InputNode,
@@ -100,9 +100,9 @@ const nodeTypes: Record<string, any> = {
   process: ProcessNode,
   code: CodeNode,
   // Learning Nodes
-  "curriculum-selector": GenericLinguaFlowNode,
-  "content-generator": GenericLinguaFlowNode,
-  "math-problem-generator": GenericLinguaFlowNode,
+  "curriculum-selector": GenericVerbaPathNode,
+  "content-generator": GenericVerbaPathNode,
+  "math-problem-generator": GenericVerbaPathNode,
 }
 
 const edgeTypes: EdgeTypes = {

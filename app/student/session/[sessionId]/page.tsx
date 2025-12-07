@@ -9,7 +9,7 @@ import { useState, useCallback, useEffect, useRef } from "react"
 import { useParams, useSearchParams } from "next/navigation"
 import { LearningInterface } from "@/components/student/learning-interface"
 import type { StudentProfile } from "@/lib/types/student"
-import type { LinguaFlowWorkflow } from "@/lib/types/workflow"
+import type { VerbaPathWorkflow } from "@/lib/types/workflow"
 import type { NodeExecution } from "@/lib/types/execution"
 import { DEMO_WORKFLOW } from "@/lib/constants/demo-workflow"
 
@@ -28,7 +28,7 @@ interface QuestionData {
 }
 
 interface SessionState {
-  workflow: LinguaFlowWorkflow | null
+  workflow: VerbaPathWorkflow | null
   student: StudentProfile | null
   nodeExecutions: NodeExecution[]
   currentNodeIndex: number
@@ -167,7 +167,7 @@ export default function SessionPage() {
     }
   }, [recordProgress])
 
-  const startExecution = useCallback(async (workflow: LinguaFlowWorkflow, student: StudentProfile) => {
+  const startExecution = useCallback(async (workflow: VerbaPathWorkflow, student: StudentProfile) => {
     setIsStreaming(true)
     setStreamingText("")
     abortControllerRef.current = new AbortController()
@@ -266,7 +266,7 @@ export default function SessionPage() {
         }
 
         // Fetch workflow
-        let workflow: LinguaFlowWorkflow | null = null
+        let workflow: VerbaPathWorkflow | null = null
         if (workflowId) {
           const workflowRes = await fetch(`/api/workflows/${workflowId}`)
           if (workflowRes.ok) {

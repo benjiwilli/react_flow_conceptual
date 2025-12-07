@@ -1,7 +1,7 @@
 "use client"
 
 /**
- * Generic LinguaFlow Node Component
+ * Generic VerbaPath Node Component
  * Renders any node type with appropriate styling based on category
  */
 
@@ -68,7 +68,7 @@ const ICONS: Record<string, LucideIcon> = {
   Settings,
 }
 
-export const GenericLinguaFlowNode = memo(({ data, selected, type }: NodeProps) => {
+export const GenericVerbaPathNode = memo(({ data, selected, type }: NodeProps) => {
   const nodeConfig = getNodeConfig(type as AllNodeTypes)
   const nodeData = data as unknown as BaseNodeData
 
@@ -141,7 +141,7 @@ export const GenericLinguaFlowNode = memo(({ data, selected, type }: NodeProps) 
   )
 })
 
-GenericLinguaFlowNode.displayName = "GenericLinguaFlowNode"
+GenericVerbaPathNode.displayName = "GenericVerbaPathNode"
 
 // ============================================================================
 // Type-Specific Content Renderers
@@ -408,4 +408,4 @@ function MathProblemContent({ data, colors }: Omit<NodeContentProps, "type">) {
   )
 }
 
-export default GenericLinguaFlowNode
+export default GenericVerbaPathNode

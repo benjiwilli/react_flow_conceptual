@@ -8,7 +8,7 @@
  * @apiVersion 1.0.0
  * 
  * @apiDescription
- * Executes a LinguaFlow workflow for a student, returning results via Server-Sent Events (SSE).
+ * Executes a VerbaPath workflow for a student, returning results via Server-Sent Events (SSE).
  * Each node execution emits events that can be consumed in real-time.
  * 
  * **Authentication:** Optional (rate limited by IP when unauthenticated)
@@ -45,7 +45,7 @@
  */
 
 import { WorkflowExecutor } from "@/lib/engine/executor"
-import type { LinguaFlowWorkflow } from "@/lib/types/workflow"
+import type { VerbaPathWorkflow } from "@/lib/types/workflow"
 import type { StudentProfile } from "@/lib/types/student"
 import { z } from "zod"
 import { checkExecutionLimit, checkIpLimit } from "@/lib/middleware/rate-limiter"
@@ -234,7 +234,7 @@ export async function POST(request: Request) {
             if (aborted) {
               throw new Error("Client disconnected")
             }
-            return executor.execute(workflow as LinguaFlowWorkflow, student as StudentProfile)
+            return executor.execute(workflow as VerbaPathWorkflow, student as StudentProfile)
           })
           .catch((error) => {
             if (!aborted) {

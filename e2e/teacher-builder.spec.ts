@@ -16,8 +16,8 @@ test.describe("Teacher Workflow Builder", () => {
   })
 
   test("should load the builder page", async ({ page }) => {
-    // Check that the LinguaFlow header/branding is visible
-    await expect(page.getByText("LinguaFlow")).toBeVisible()
+    // Check that the VerbaPath header/branding is visible
+    await expect(page.getByText("VerbaPath")).toBeVisible()
     await expect(page.getByText("Learning Pathway Builder")).toBeVisible()
   })
 

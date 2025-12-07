@@ -7,7 +7,7 @@ import { Suspense } from "react"
 import { ActivityPlayer } from "@/components/student/activity-player"
 
 export const metadata = {
-  title: "Activity | LinguaFlow",
+  title: "Activity | VerbaPath",
   description: "Complete your learning activity",
 }
 

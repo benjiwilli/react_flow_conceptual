@@ -4,11 +4,11 @@
  * Used when no workflow is specified in the session URL
  */
 
-import type { LinguaFlowWorkflow } from "@/lib/types/workflow"
+import type { VerbaPathWorkflow } from "@/lib/types/workflow"
 
-export const DEMO_WORKFLOW: LinguaFlowWorkflow = {
+export const DEMO_WORKFLOW: VerbaPathWorkflow = {
   id: "demo-workflow",
-  name: "Welcome to LinguaFlow!",
+  name: "Welcome to VerbaPath!",
   description: "A sample learning activity demonstrating the platform's capabilities",
   nodes: [
     {

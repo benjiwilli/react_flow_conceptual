@@ -54,7 +54,7 @@
 import { NextResponse } from "next/server"
 import { createServerClient, isSupabaseConfigured } from "@/lib/supabase"
 import { workflowTemplates, createWorkflowFromTemplate } from "@/lib/constants/workflow-templates"
-import type { LinguaFlowWorkflow } from "@/lib/types/workflow"
+import type { VerbaPathWorkflow } from "@/lib/types/workflow"
 
 // GET /api/workflows - List workflows
 export async function GET(request: Request) {
@@ -85,18 +85,18 @@ export async function GET(request: Request) {
         return NextResponse.json({ error: error.message }, { status: 500 })
       }
       
-      const workflows: LinguaFlowWorkflow[] = (data || []).map((w) => ({
+      const workflows: VerbaPathWorkflow[] = (data || []).map((w) => ({
         id: w.id,
         name: w.name,
         description: w.description || "",
-        nodes: w.nodes as LinguaFlowWorkflow["nodes"],
-        edges: w.edges as LinguaFlowWorkflow["edges"],
+        nodes: w.nodes as VerbaPathWorkflow["nodes"],
+        edges: w.edges as VerbaPathWorkflow["edges"],
         createdBy: w.author_id,
         isTemplate: w.is_template,
         isPublic: w.is_public,
         targetGrades: w.target_grades || [],
         targetELPALevels: w.target_elpa_levels || [],
-        category: (w.category as LinguaFlowWorkflow["category"]) || "custom",
+        category: (w.category as VerbaPathWorkflow["category"]) || "custom",
         subject: w.subject || undefined,
         tags: w.tags || [],
         createdAt: new Date(w.created_at),
@@ -115,7 +115,7 @@ export async function GET(request: Request) {
       id: t.id,
       createdAt: new Date(),
       updatedAt: new Date(),
-    } as LinguaFlowWorkflow
+    } as VerbaPathWorkflow
   })
 
   return NextResponse.json({ workflows })
@@ -152,18 +152,18 @@ export async function POST(request: Request) {
           return NextResponse.json({ error: error.message }, { status: 500 })
         }
         
-        const workflow: LinguaFlowWorkflow = {
+        const workflow: VerbaPathWorkflow = {
           id: data.id,
           name: data.name,
           description: data.description || "",
-          nodes: data.nodes as LinguaFlowWorkflow["nodes"],
-          edges: data.edges as LinguaFlowWorkflow["edges"],
+          nodes: data.nodes as VerbaPathWorkflow["nodes"],
+          edges: data.edges as VerbaPathWorkflow["edges"],
           createdBy: data.author_id,
           isTemplate: data.is_template,
           isPublic: data.is_public,
           targetGrades: data.target_grades || [],
           targetELPALevels: data.target_elpa_levels || [],
-          category: (data.category as LinguaFlowWorkflow["category"]) || "custom",
+          category: (data.category as VerbaPathWorkflow["category"]) || "custom",
           subject: data.subject || undefined,
           tags: data.tags || [],
           createdAt: new Date(data.created_at),
@@ -175,7 +175,7 @@ export async function POST(request: Request) {
     }
 
     // Return mock response when Supabase not configured
-    const workflow: LinguaFlowWorkflow = {
+    const workflow: VerbaPathWorkflow = {
       id: crypto.randomUUID(),
       name: body.name || "Untitled Workflow",
       description: body.description || "",

@@ -1,11 +1,11 @@
 /**
- * Extended Workflow Types for LinguaFlow
+ * Extended Workflow Types for VerbaPath
  * Building on existing React Flow types
  */
 
 import type { Node, Edge } from "@xyflow/react"
 
-export type LinguaFlowNodeType =
+export type VerbaPathNodeType =
   // ESL Nodes
   | "student-profile"
   | "scaffolded-content"
@@ -46,13 +46,13 @@ export type LinguaFlowNodeType =
   | "process"
   | "code"
 
-// LinguaFlowEdge is an alias for Edge
-export type LinguaFlowEdge = Edge
+// VerbaPathEdge is an alias for Edge
+export type VerbaPathEdge = Edge
 
-// LinguaFlowNode uses Node type with a generic Record to satisfy the constraint
-export type LinguaFlowNode = Node<Record<string, unknown> & Partial<LinguaFlowNodeData>, LinguaFlowNodeType>
+// VerbaPathNode uses Node type with a generic Record to satisfy the constraint
+export type VerbaPathNode = Node<Record<string, unknown> & Partial<VerbaPathNodeData>, VerbaPathNodeType>
 
-export interface LinguaFlowNodeData {
+export interface VerbaPathNodeData {
   label: string
   description?: string
   config: Record<string, unknown>
@@ -69,11 +69,11 @@ export interface NodePort {
   description?: string
 }
 
-export interface LinguaFlowWorkflow {
+export interface VerbaPathWorkflow {
   id: string
   name: string
   description: string
-  nodes: LinguaFlowNode[]
+  nodes: VerbaPathNode[]
   edges: Edge[]
   targetGrades: string[]
   targetELPALevels: number[]
@@ -91,7 +91,7 @@ export interface LinguaFlowWorkflow {
 }
 
 // Alias for backward compatibility
-export type Workflow = LinguaFlowWorkflow
+export type Workflow = VerbaPathWorkflow
 
 export type WorkflowCategory =
   | "literacy"

@@ -7,7 +7,7 @@
 
 import { createContext, useContext, useState, useCallback, useRef, type ReactNode } from "react"
 import type { WorkflowExecution, NodeExecution, StreamEvent } from "@/lib/types/execution"
-import type { LinguaFlowWorkflow } from "@/lib/types/workflow"
+import type { VerbaPathWorkflow } from "@/lib/types/workflow"
 import { WorkflowExecutor, type ExecutorCallbacks } from "@/lib/engine/executor"
 import { getStreamManager } from "@/lib/engine/stream-manager"
 
@@ -22,7 +22,7 @@ interface ExecutionContextValue {
   currentStreamingNodeId: string | null
 
   // Execution control
-  executeWorkflow: (workflow: LinguaFlowWorkflow, studentId: string) => Promise<void>
+  executeWorkflow: (workflow: VerbaPathWorkflow, studentId: string) => Promise<void>
   pauseExecution: () => void
   resumeExecution: () => Promise<void>
   cancelExecution: () => void
@@ -74,7 +74,7 @@ export function ExecutionProvider({ children }: { children: ReactNode }) {
   }
 
   const executeWorkflow = useCallback(
-    async (workflow: LinguaFlowWorkflow, studentId: string) => {
+    async (workflow: VerbaPathWorkflow, studentId: string) => {
       setIsExecuting(true)
       setError(null)
       setStreamingContent({})

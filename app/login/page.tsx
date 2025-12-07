@@ -52,15 +52,15 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-50 to-blue-50 p-4">
-      <Card className="w-full max-w-md shadow-lg">
+    <div className="flex min-h-screen items-center justify-center bg-background p-4">
+      <Card className="w-full max-w-md shadow-soft border-0">
         <CardHeader className="space-y-1 text-center">
           <div className="flex justify-center mb-4">
-            <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center">
-              <span className="text-2xl font-bold text-white">L</span>
+            <div className="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center transition-gentle hover:scale-105">
+              <span className="text-2xl font-medium text-primary-foreground">V</span>
             </div>
           </div>
-          <CardTitle className="text-2xl font-bold">Welcome to LinguaFlow</CardTitle>
+          <CardTitle className="text-2xl font-medium tracking-tight">Welcome to VerbaPath</CardTitle>
           <CardDescription>
             Sign in to your account to access the workflow builder
           </CardDescription>

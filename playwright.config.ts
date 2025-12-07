@@ -1,5 +1,5 @@
 /**
- * Playwright Configuration for LinguaFlow
+ * Playwright Configuration for VerbaPath
  * E2E testing setup for critical user flows
  */
 

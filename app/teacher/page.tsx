@@ -7,7 +7,7 @@ import { Suspense } from "react"
 import { TeacherDashboard } from "@/components/teacher/teacher-dashboard"
 
 export const metadata = {
-  title: "Teacher Dashboard | LinguaFlow",
+  title: "Teacher Dashboard | VerbaPath",
   description: "Build and manage AI-powered learning pathways for ESL students",
 }
 

@@ -44,7 +44,7 @@ import type {
   HumanInputNodeData,
   InputType,
   L1BridgeNodeData,
-  LinguaFlowNodeData,
+  VerbaPathNodeData,
   NodeCategory,
   ProficiencyRouterNodeData,
   PromptTemplateNodeData,
@@ -58,7 +58,7 @@ import type { SubjectArea } from "@/lib/types/curriculum"
 
 interface NodeInspectorProps {
   node: Node
-  onUpdateNodeData: (nodeId: string, data: Partial<LinguaFlowNodeData>) => void
+  onUpdateNodeData: (nodeId: string, data: Partial<VerbaPathNodeData>) => void
   onClose: () => void
 }
 
@@ -68,7 +68,7 @@ export function NodeInspector({ node, onUpdateNodeData, onClose }: NodeInspector
   const colors = CATEGORY_COLORS[category]
 
   const updateData = useCallback(
-    (updates: Partial<LinguaFlowNodeData>) => {
+    (updates: Partial<VerbaPathNodeData>) => {
       onUpdateNodeData(node.id, updates)
     },
     [node.id, onUpdateNodeData]
@@ -146,7 +146,7 @@ export function NodeInspector({ node, onUpdateNodeData, onClose }: NodeInspector
 
 interface NodeConfigFormProps {
   node: Node
-  updateData: (updates: Partial<LinguaFlowNodeData>) => void
+  updateData: (updates: Partial<VerbaPathNodeData>) => void
 }
 
 type ConfigData = Record<string, unknown>
@@ -157,7 +157,7 @@ type ConfigProps = {
 }
 
 function NodeConfigForm({ node, updateData }: NodeConfigFormProps) {
-  const data = node.data as Partial<LinguaFlowNodeData>
+  const data = node.data as Partial<VerbaPathNodeData>
 
   // Common label field
   const renderLabelField = () => (

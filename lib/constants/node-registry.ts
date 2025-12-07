@@ -1,5 +1,5 @@
 /**
- * Node Registry - Complete configuration for all LinguaFlow nodes
+ * Node Registry - Complete configuration for all VerbaPath nodes
  * Defines metadata, default values, and port definitions for each node type
  */
 

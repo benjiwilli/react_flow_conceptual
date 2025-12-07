@@ -26,7 +26,7 @@ import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Progress } from "@/components/ui/progress"
 import type { ExecutionStatus } from "@/lib/types/execution"
-import type { LinguaFlowWorkflow } from "@/lib/types/workflow"
+import type { VerbaPathWorkflow } from "@/lib/types/workflow"
 import type { StudentProfile } from "@/lib/types/student"
 
 interface ExecutionLogEntry {
@@ -300,7 +300,7 @@ function LogEntry({ entry }: LogEntryProps) {
 // Mock Execution Hook (for demonstration)
 // ============================================================================
 
-type ExecutionPayloadBuilder = () => { workflow: LinguaFlowWorkflow; student: StudentProfile }
+type ExecutionPayloadBuilder = () => { workflow: VerbaPathWorkflow; student: StudentProfile }
 
 export function useExecutionPanel(buildPayload: ExecutionPayloadBuilder) {
   const [status, setStatus] = useState<ExecutionStatus>("pending")
